@@ -213,3 +213,48 @@
     </script>
 </body>
 </html>
+<video id="bg-video" autoplay muted playsinline>
+    <source id="video-source" src="385937dae3995b54f3fecde0dd7acec7_1769970173274.mp4" type="video/mp4">
+</video>
+
+<button id="unmute-btn" onclick="enableAudio()" style="position: fixed; top: 10px; left: 10px; z-index: 1000; background: rgba(255,0,60,0.7); color: white; border: none; padding: 8px 15px; border-radius: 20px; font-family: 'Tajawal'; cursor: pointer; font-size: 12px; border: 1px solid var(--gold);">
+    🔊 تشغيل الصوت
+</button>
+
+<script>
+    const videoPlayer = document.getElementById('bg-video');
+    const videoSource = document.getElementById('video-source');
+    const unmuteBtn = document.getElementById('unmute-btn');
+
+    // قائمة الفيديوهات بالترتيب
+    const playlist = [
+        "385937dae3995b54f3fecde0dd7acec7_1769970173274.mp4",
+        "fqBsQ4ZhiMk.mp4"
+    ];
+    
+    let currentVideoIndex = 0;
+
+    // وظيفة الانتقال للفيديو التالي
+    videoPlayer.onended = function() {
+        currentVideoIndex++;
+        if (currentVideoIndex >= playlist.length) {
+            currentVideoIndex = 0; // ارجع للأول
+        }
+        videoSource.src = playlist[currentVideoIndex];
+        videoPlayer.load();
+        videoPlayer.play();
+    };
+
+    // وظيفة تفعيل الصوت
+    function enableAudio() {
+        videoPlayer.muted = false;
+        unmuteBtn.style.display = 'none'; // اخفي الزرار بعد الضغط
+    }
+
+    // محاولة تشغيل الفيديو تلقائياً في حالة توقفه
+    window.addEventListener('click', function() {
+        if (videoPlayer.paused) {
+            videoPlayer.play();
+        }
+    }, { once: true });
+</script>
