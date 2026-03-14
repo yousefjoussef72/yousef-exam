@@ -3,75 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اختبار يوسف الذكي 🚀</title>
+    <title>أسئلة واختبار يوسف</title>
     <style>
         body {
-            background-color: #0b0e14;
-            color: white;
+            /* وضع صورتك كخلفية للموقع */
+            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('Screenshot_2026-03-14-17-16-23-72.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 20px;
             display: flex;
             justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: white;
         }
         .container {
-            background: #161b22;
-            padding: 30px;
-            border-radius: 15px;
-            border: 1px solid #30363d;
-            width: 100%;
-            max-width: 450px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            background: rgba(22, 27, 34, 0.9); /* خلفية شفافة عشان الصورة تبان */
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px solid #58a6ff;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            margin: 20px;
         }
-        h2 { color: #58a6ff; text-align: center; margin-bottom: 25px; }
-        .field { margin-bottom: 15px; text-align: right; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #c9d1d9; }
+        h2 { color: #58a6ff; text-align: center; margin-bottom: 20px; font-size: 22px; }
+        .field { margin-bottom: 12px; text-align: right; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
         input, select {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             border-radius: 8px;
             border: 1px solid #30363d;
-            background: #0d1117;
+            background: rgba(13, 17, 23, 0.8);
             color: white;
-            font-size: 15px;
+            font-size: 14px;
             outline: none;
             box-sizing: border-box;
         }
-        input:focus { border-color: #58a6ff; }
         button {
             background: #238636;
             color: white;
             border: none;
-            padding: 15px;
+            padding: 12px;
             width: 100%;
-            border-radius: 8px;
-            font-size: 18px;
+            border-radius: 10px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 15px;
             transition: 0.3s;
         }
-        button:hover { background: #2ea043; }
-        #status { text-align: center; margin-top: 15px; font-weight: bold; }
+        button:hover { background: #2ea043; transform: scale(1.02); }
+        #status { text-align: center; margin-top: 10px; font-weight: bold; font-size: 14px; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h2>أجب على الأسئلة يا بطل 💬</h2>
+        <h2>أجب على الأسئلة يا بطل ⚽</h2>
         
         <div class="field">
             <label>👤 الاسم بالكامل:</label>
-            <input type="text" id="name" placeholder="اكتب اسمك">
+            <input type="text" id="name" placeholder="ما اسمك؟">
         </div>
 
         <div class="field">
             <label>📧 البريد الإلكتروني:</label>
-            <input type="email" id="email" placeholder="example@mail.com">
+            <input type="email" id="email" placeholder="بريدك الإلكتروني">
         </div>
 
         <div class="field">
-            <label>🎓 أنت في سنة كام؟</label>
+            <label>🎓 السنة الدراسية:</label>
             <input type="text" id="grade" placeholder="مثلاً: أولى ثانوي">
         </div>
 
@@ -81,12 +86,12 @@
         </div>
 
         <div class="field">
-            <label>❤️ ماذا تحب في الحياة؟</label>
-            <input type="text" id="love" placeholder="هوايتك أو شغفك">
+            <label>❤️ ماذا تحب؟</label>
+            <input type="text" id="love" placeholder="هوايتك المفضلة">
         </div>
 
         <div class="field">
-            <label>⚽ رأيك في تشكيلة يوسف؟</label>
+            <label>⚽ رأيك في تشكيلتي؟</label>
             <select id="opinion">
                 <option value="عالمية 🔥">عالمية 🔥</option>
                 <option value="كويسة جداً 👍">كويسة جداً 👍</option>
@@ -96,7 +101,7 @@
 
         <div class="field">
             <label>🛡️ ناديك المفضل؟</label>
-            <input type="text" id="club" placeholder="الأهلي، الزمالك، ريال مدريد...">
+            <input type="text" id="club" placeholder="بتشجع مين؟">
         </div>
 
         <button onclick="sendData()">إرسال البيانات ليوسف 🚀</button>
@@ -125,17 +130,9 @@
             }
 
             const status = document.getElementById('status');
-            status.style.color = "#58a6ff";
-            status.innerText = "جاري الإرسال للتليجرام...";
+            status.innerText = "جاري الإرسال...";
 
-            const text = `🔥 وصلت إجابات جديدة يا يوسف! 🔥\n\n` +
-                         `👤 الاسم: ${data.name}\n` +
-                         `📧 الإيميل: ${data.email}\n` +
-                         `🎓 السنة: ${data.grade}\n` +
-                         `🎂 العمر: ${data.age}\n` +
-                         `❤️ بيحب: ${data.love}\n` +
-                         `⚽ رأيه في التشكيلة: ${data.opinion}\n` +
-                         `🛡️ النادي المفضل: ${data.club}`;
+            const text = `🔥 وصلت إجابة جديدة! 🔥\n\n👤 الاسم: ${data.name}\n📧 الإيميل: ${data.email}\n🎓 السنة: ${data.grade}\n🎂 العمر: ${data.age}\n❤️ يحب: ${data.love}\n⚽ التشكيلة: ${data.opinion}\n🛡️ النادي: ${data.club}`;
 
             const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(text)}`;
 
@@ -143,10 +140,13 @@
                 if(res.ok) {
                     status.style.color = "#3fb950";
                     status.innerText = "تم الإرسال بنجاح! ✅";
-                    alert("شكراً لك! إجاباتك وصلت ليوسف.");
+                    alert("إجاباتك وصلت ليوسف، شكراً لك!");
+                    // مسح الخانات
+                    document.getElementById('name').value = "";
+                    document.getElementById('email').value = "";
                 } else {
                     status.style.color = "#f85149";
-                    status.innerText = "حدث خطأ في الإرسال.";
+                    status.innerText = "خطأ في الإرسال.";
                 }
             });
         }
