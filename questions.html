@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع يوسف - بوت التليجرام</title>
+    <style>
+        body {
+            background-image: url('Screenshot_2026-03-14-17-16-23-72.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .form-box {
+            background: rgba(0, 0, 0, 0.85);
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #00d4ff;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            color: white;
+        }
+        input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; }
+        button { background: #00d4ff; color: black; padding: 12px 20px; border: none; border-radius: 20px; font-weight: bold; cursor: pointer; width: 100%; }
+    </style>
+</head>
+<body>
+
+    <div class="form-box">
+        <h2>أسئلة يوسف ⚽</h2>
+        <input type="text" id="name" placeholder="ما اسمك؟">
+        <input type="text" id="love" placeholder="ماذا تحب؟">
+        <input type="number" id="age" placeholder="كم عمرك؟">
+        <button onclick="sendToTelegram()">إرسال ليوسف</button>
+        <p id="status"></p>
+    </div>
+
+    <script>
+        function sendToTelegram() {
+            const token = "ضع_هنا_التوكن_بتاع_البوت"; // حط الـ Token هنا
+            const chat_id = "ضع_هنا_الـ_ID_بتاعك"; // حط الـ Chat ID هنا
+            
+            const name = document.getElementById('name').value;
+            const love = document.getElementById('love').value;
+            const age = document.getElementById('age').value;
+
+            if(!name || !love || !age) { alert("اكمل البيانات!"); return; }
+
+            const message = `وصلت إجابة جديدة! ✅\n\n👤 الاسم: ${name}\n❤️ بيحب: ${love}\n🎂 العمر: ${age}`;
+            
+            const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
+
+            fetch(url).then(response => {
+                if(response.ok) {
+                    document.getElementById('status').innerText = "تم الإرسال بنجاح! يوسف هيشوفها دلوقتي.";
+                    document.getElementById('name').value = "";
+                    document.getElementById('love').value = "";
+                    document.getElementById('age').value = "";
+                } else {
+                    alert("حدث خطأ في الإرسال.");
+                }
+            });
+        }
+    </script>
+</body>
+</html>
