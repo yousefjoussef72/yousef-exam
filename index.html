@@ -3,163 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مملكة الأوتاكو الأسطورية ⛩️</title>
+    <title>اختبار الأوتاكو للدخول</title>
     <style>
-        :root { --main: #ff3e3e; --gold: #ffcc00; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow-x: hidden; font-family: 'Cairo', sans-serif; background-color: #000; color: white; }
-        
-        /* فيديو الخلفية */
-        #bg-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; opacity: 0.4; }
-
-        .overlay { display: flex; justify-content: center; align-items: center; padding: 20px; }
-        
-        .card { 
-            background: rgba(10, 10, 10, 0.9); width: 95%; max-width: 450px; 
-            padding: 25px; border-radius: 20px; border: 2px solid var(--main); 
-            box-shadow: 0 0 25px var(--main); text-align: center; backdrop-filter: blur(10px);
+        /* تنسيق الخلفية لتكون صور أبطال الأنمي */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* استبدل الرابط أدناه برابط صورة تجمع أبطال الأنمي */
+            background-image: url('https://example.com/anime-background.jpg'); 
+            background-size: cover;
+            background-attachment: fixed;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
         }
-
-        h1 { color: var(--main); text-shadow: 0 0 10px #ff0000; margin-bottom: 5px; font-size: 24px; }
-        
-        /* الكاميرا */
-        video#webcam { width: 100%; border-radius: 12px; border: 2px solid var(--gold); margin-bottom: 15px; background: #111; display: block; }
-
-        /* شبكة الأبطال */
-        .char-title { text-align: right; color: var(--gold); font-size: 14px; margin-bottom: 10px; }
-        .char-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-        .char-item { cursor: pointer; border: 2px solid transparent; border-radius: 12px; overflow: hidden; transition: 0.3s; background: #222; height: 80px; }
-        .char-item img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%); }
-        .char-item.active { border-color: var(--gold); transform: scale(1.05); box-shadow: 0 0 15px var(--gold); }
-        .char-item.active img { filter: grayscale(0%); }
-
-        /* الخانات */
-        .input-group { text-align: right; margin-bottom: 12px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px; color: var(--gold); }
-        input, select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #444; background: rgba(20, 20, 20, 0.9); color: white; outline: none; box-sizing: border-box; }
-        input:focus { border-color: var(--main); }
-
-        .btn-join { 
-            background: var(--main); color: white; padding: 15px; border: none; 
-            border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; 
-            width: 100%; transition: 0.3s; margin-top: 10px; box-shadow: 0 5px 0 #b30000;
+        /* تنسيق صندوق النموذج */
+        .container {
+            background-color: rgba(0, 0, 0, 0.8);
+            max-width: 600px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 69, 0, 0.5);
         }
-        .btn-join:hover { background: #ff1a1a; transform: translateY(-2px); }
-        #status { font-size: 12px; margin-top: 10px; color: #aaa; }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #ff4500;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover { background-color: #cc3700; }
+        .hidden { display: none; }
     </style>
 </head>
-<body onload="startCamera()">
+<body>
 
-    <video autoplay muted loop id="bg-video" playsinline>
-        <source src="https://v1.pichau.com.br/anime-bg-video.mp4" type="video/mp4">
-    </video>
+<div class="container">
+    <h1 style="text-align: center; color: #ff4500;">بوابة دخول الأوتاكو</h1>
+    <p style="text-align: center;">أجب على الأسئلة لتثبت جدارتك وتنضم للجروب!</p>
 
-    <div class="overlay">
-        <div class="card">
-            <h1>⛩️ مَمْلَكَة الأوتـاكو ⛩️</h1>
-            <p style="color:var(--gold); font-size:12px">أثبت هويتك لتنضم لجيش يوسف</p>
+    <form id="otakuForm">
+        <input type="text" id="userName" placeholder="الاسم" required>
+        <input type="number" id="userAge" placeholder="السن" required>
+        <input type="email" id="userEmail" placeholder="البريد الإلكتروني" required>
+        
+        <select id="userTitle" required>
+            <option value="" disabled selected>اختر لقبك (شخصيتك المفضلة)</option>
+            <option value="ملك القراصنة - لوفي">ملك القراصنة - لوفي</option>
+            <option value="الهوكاجي - ناروتو">الهوكاجي - ناروتو</option>
+            <option value="أقوى ساحر - غوجو">أقوى ساحر - غوجو</option>
+        </select>
 
-            <video id="webcam" autoplay playsinline></video>
-            <canvas id="capture" style="display:none;"></canvas>
+        <h3>أي أنمي تشجع؟</h3>
+        <select id="animeChoice" onchange="showQuestions()" required>
+            <option value="" disabled selected>اختر الأنمي</option>
+            <option value="onepiece">One Piece</option>
+            <option value="aot">Attack on Titan</option>
+        </select>
 
-            <div class="char-title">اختر بـطـلك المفضـل:</div>
-            <div class="char-grid">
-                <div class="char-item" onclick="selectHero('لوفي 👒', this)"><img src="https://i.pinimg.com/736x/01/7e/17/017e179e889d13e9a7e801197472097e.jpg"></div>
-                <div class="char-item" onclick="selectHero('ناروتو 🦊', this)"><img src="https://i.pinimg.com/736x/0a/6e/02/0a6e029272809633e680a37315177df8.jpg"></div>
-                <div class="char-item" onclick="selectHero('غوكو ⚡', this)"><img src="https://i.pinimg.com/736x/70/40/e3/7040e32230a6f44d82b453a258810793.jpg"></div>
-            </div>
-
-            <div class="input-group">
-                <label>👤 الاسم الحقيقي:</label>
-                <input type="text" id="name" placeholder="اسمك الكامل">
-            </div>
-
-            <div class="input-group">
-                <label>⚔️ لقبك الأسطوري:</label>
-                <input type="text" id="nick" placeholder="مثلاً: قاهر الأساطير">
-            </div>
-
-            <div class="input-group">
-                <label>📧 البريد الإلكتروني:</label>
-                <input type="email" id="email" placeholder="example@mail.com">
-            </div>
-
-            <div class="input-group">
-                <label>🎓 السنة الدراسية:</label>
-                <input type="text" id="grade" placeholder="أنت في سنة كام؟">
-            </div>
-
-            <div class="input-group">
-                <label>📺 الأنمي المفضل لديك:</label>
-                <input type="text" id="favAnime" placeholder="ماذا تشاهد حالياً؟">
-            </div>
-
-            <button class="btn-join" onclick="processJoin()">ارسل الهوية وانضم الآن 🔥</button>
-            <div id="status">يجب السماح بالكاميرا للتحقق...</div>
+        <div id="questionsDiv" class="hidden">
+            <h4 id="questionText"></h4>
+            <select id="animeAnswer" required>
+                </select>
         </div>
-    </div>
 
-    <script>
-        const token = "8737868558:AAFqvBT8qY3E5kJDC8bjXT1Ku9gSBXv9Q4g";
-        const chat_id = "7394389253";
-        const whatsapp = "https://chat.whatsapp.com/J08oDw7MzULIJHnzN2Okts?mode=gi_t";
+        <button type="submit" id="submitBtn">إرسال والانضمام للجروب</button>
+    </form>
+</div>
 
-        let selectedHero = "";
-        let video = document.getElementById('webcam');
-        let canvas = document.getElementById('capture');
+<script>
+    // إعدادات التليجرام والواتساب (يجب تعديلها)
+    const botToken = 'ضع_توكن_البوت_هنا';
+    const chatId = 'ضع_أيدي_حسابك_هنا';
+    const whatsappLink = 'https://chat.whatsapp.com/ضع_رابط_جروبك_هنا';
 
-        function startCamera() {
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
-            .then(stream => {
-                video.srcObject = stream;
-                document.getElementById('status').innerText = "الكاميرا تعمل.. سجل بياناتك يا بطل!";
-            })
-            .catch(() => {
-                alert("يا محارب! المملكة تشترط الكاميرا للتأكد من هويتك.");
-                document.getElementById('status').innerText = "خطأ: لم يتم تفعيل الكاميرا.";
+    // بيانات الأسئلة حسب الأنمي
+    const animeData = {
+        onepiece: {
+            question: "ما هو اسم الفاكهة الحقيقي التي أكلها لوفي؟",
+            options: ["جومو جومو نو مي", "هيتو هيتو نو مي (نموذج نيكا)", "ميرا ميرا نو مي"],
+            correctAnswer: "هيتو هيتو نو مي (نموذج نيكا)"
+        },
+        aot: {
+            question: "من هو صاحب العملاق المدرع؟",
+            options: ["إيرين ييغر", "راينر براون", "بيرتولدت هوفر"],
+            correctAnswer: "راينر براون"
+        }
+    };
+
+    // إظهار الأسئلة بناءً على الاختيار
+    function showQuestions() {
+        const choice = document.getElementById('animeChoice').value;
+        const qDiv = document.getElementById('questionsDiv');
+        const qText = document.getElementById('questionText');
+        const qSelect = document.getElementById('animeAnswer');
+
+        if(animeData[choice]) {
+            qDiv.classList.remove('hidden');
+            qText.innerText = animeData[choice].question;
+            
+            // تفريغ الخيارات القديمة ووضع الجديدة
+            qSelect.innerHTML = '<option value="" disabled selected>اختر إجابتك</option>';
+            animeData[choice].options.forEach(opt => {
+                qSelect.innerHTML += `<option value="${opt}">${opt}</option>`;
             });
         }
+    }
 
-        function selectHero(hero, el) {
-            selectedHero = hero;
-            document.querySelectorAll('.char-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
+    // التعامل مع إرسال النموذج
+    document.getElementById('otakuForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // منع إعادة تحميل الصفحة
+        
+        // جمع البيانات
+        const name = document.getElementById('userName').value;
+        const age = document.getElementById('userAge').value;
+        const email = document.getElementById('userEmail').value;
+        const title = document.getElementById('userTitle').value;
+        const anime = document.getElementById('animeChoice').value;
+        const answer = document.getElementById('animeAnswer').value;
+        
+        // التحقق من الإجابة
+        let scoreMsg = "الإجابة خاطئة ❌";
+        if(answer === animeData[anime].correctAnswer) {
+            scoreMsg = "الإجابة صحيحة ✅ (يستحق الجائزة!)";
         }
 
-        function processJoin() {
-            const name = document.getElementById('name').value;
-            const nick = document.getElementById('nick').value;
-            const email = document.getElementById('email').value;
-            const grade = document.getElementById('grade').value;
-            const fav = document.getElementById('favAnime').value;
+        // تجهيز الرسالة للتليجرام
+        const message = `
+🌟 عضو جديد يطلب الانضمام 🌟
+👤 الاسم: ${name}
+📅 السن: ${age}
+📧 الإيميل: ${email}
+👑 اللقب: ${title}
+📺 الأنمي المفضل: ${anime}
+📝 الإجابة: ${answer}
+🏆 النتيجة: ${scoreMsg}
+        `;
 
-            if(!name || !selectedHero || !video.srcObject) {
-                alert("اكمل بياناتك وافتح الكاميرا لتنضم!");
-                return;
-            }
+        // إرسال البيانات لبوت التليجرام
+        const tgUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+        
+        fetch(tgUrl)
+            .then(response => {
+                if(response.ok) {
+                    alert("تم إرسال إجاباتك بنجاح! سيتم تحويلك لجروب الواتساب الآن.");
+                    window.location.href = whatsappLink; // التحويل للواتساب
+                } else {
+                    alert("حدث خطأ أثناء الإرسال. تأكد من إعدادات البوت.");
+                }
+            })
+            .catch(error => {
+                alert("تعذر الاتصال بالخادم.");
+            });
+    });
+</script>
 
-            document.getElementById('status').innerText = "جاري إرسال هويتك للبوت...";
-
-            // التقاط الصورة
-            const context = canvas.getContext('2d');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            
-            canvas.toBlob(blob => {
-                const formData = new FormData();
-                formData.append("chat_id", chat_id);
-                formData.append("photo", blob, "id.jpg");
-                formData.append("caption", `🆕 عضو جديد في المملكة!\n\n👤 الاسم: ${name}\n🎭 اللقب: ${nick}\n📧 الإيميل: ${email}\n🎓 السنة: ${grade}\n📺 الأنمي: ${fav}\n🛡️ البطل: ${selectedHero}`);
-
-                fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: "POST", body: formData })
-                .then(res => {
-                    if(res.ok) {
-                        alert("تم التحقق! أهلاً بك في الجروب.");
-                        window.location.href = whatsapp; // التحويل للواتساب تلقائياً
-                    }
-                });
-            }, 'image/jpeg');
-        }
-    </script>
 </body>
 </html>
