@@ -3,90 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>موقع يوسف - التشكيلة والأسئلة</title>
+    <title>تشكيلة يوسف</title>
     <style>
         body {
-            /* هنا استخدمنا صورتك الأصلية كخلفية للموقع كله */
-            background-image: url('Screenshot_2026-03-14-17-16-23-72.jpg');
-            background-size: contain; /* عشان الصورة تظهر كاملة */
-            background-repeat: no-repeat;
-            background-position: top center;
-            background-color: #0e1111; /* لون احتياطي خلف الصورة */
-            font-family: 'Segoe UI', Tahoma, sans-serif;
             margin: 0;
-            padding: 20px;
-            color: white;
+            padding: 0;
+            background-color: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
         }
-        .main-container {
-            background: rgba(0, 0, 0, 0.8); /* برواز شفاف عشان نشوف الصورة ونقرأ الأسئلة */
-            max-width: 500px;
-            margin: 350px auto 50px auto; /* نزلنا الأسئلة تحت شوية عشان التشكيلة تبان فوق */
-            padding: 25px;
-            border-radius: 15px;
-            border: 2px solid #00d4ff;
-            text-align: center;
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
         }
-        h1 { color: #00d4ff; text-shadow: 2px 2px 4px #000; }
-        .input-group { margin: 15px 0; text-align: right; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; }
-        input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            border: none;
-            font-size: 16px;
-        }
-        button {
-            background: #00d4ff;
+        .btn-link {
+            margin: 20px;
+            padding: 15px 30px;
+            background-color: #00d4ff;
             color: black;
-            border: none;
-            padding: 10px 25px;
-            border-radius: 20px;
+            text-decoration: none;
             font-weight: bold;
-            cursor: pointer;
-            font-size: 18px;
+            border-radius: 50px;
+            font-size: 20px;
+            box-shadow: 0 4px 15px rgba(0,212,255,0.4);
         }
-        #result { margin-top: 15px; color: #adff2f; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="main-container">
-        <h1>أهلاً بكم في موقع يوسف ⚽</h1>
-        <p>بعد ما شوفت التشكيلة، جاوب على الأسئلة دي:</p>
+    <img src="Screenshot_2026-03-14-17-16-23-72.jpg" alt="تشكيلة يوسف">
 
-        <div class="input-group">
-            <label>1. ما اسمك؟</label>
-            <input type="text" id="name" placeholder="اسمه إيه البطل؟">
-        </div>
+    <a href="questions.html" class="btn-link">اضغط هنا للإجابة على الأسئلة 💬</a>
 
-        <div class="input-group">
-            <label>2. ماذا تحب؟</label>
-            <input type="text" id="love" placeholder="أكتر حاجة بتحبها...">
-        </div>
-
-        <div class="input-group">
-            <label>3. كم عمرك؟</label>
-            <input type="number" id="age" placeholder="عندك كام سنة؟">
-        </div>
-
-        <button onclick="check()">إرسال</button>
-        <div id="result"></div>
-    </div>
-
-    <script>
-        function check() {
-            let n = document.getElementById('name').value;
-            let l = document.getElementById('love').value;
-            if(n && l) {
-                document.getElementById('result').innerHTML = "تحية ليك يا " + n + "!<br>ذوقك حلو إنك بتحب " + l + "!";
-                alert("تم إرسال إجاباتك بنجاح ليوسف!");
-            } else {
-                alert("املا البيانات يا بطل!");
-            }
-        }
-    </script>
 </body>
 </html>
-<a href="questions.html" style="color: yellow; font-size: 20px;">اضغط هنا للإجابة على الأسئلة!</a>
-
