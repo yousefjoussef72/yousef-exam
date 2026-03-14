@@ -3,40 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تشكيلة يوسف</title>
+    <title>مملكة الأوتـاكو | يوسف ⛩️</title>
     <style>
+        :root { --main-color: #ff0000; --bg-dark: #0a0a0a; }
         body {
+            background: var(--bg-dark);
+            color: white;
+            font-family: 'Cairo', sans-serif;
             margin: 0;
-            padding: 0;
-            background-color: #000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            overflow-x: hidden;
         }
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
+        /* فيديو الخلفية */
+        #bg-video {
+            position: fixed;
+            right: 0; bottom: 0;
+            min-width: 100%; min-height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+            filter: grayscale(50%);
         }
-        .btn-link {
-            margin: 20px;
+        .main-card {
+            background: rgba(0, 0, 0, 0.85);
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid var(--main-color);
+            box-shadow: 0 0 30px var(--main-color);
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        h1 { font-size: 32px; color: var(--main-color); text-shadow: 0 0 10px #ff0000; }
+        
+        /* شبكة الشخصيات */
+        .char-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .char-item {
+            cursor: pointer;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            transition: 0.3s;
+            overflow: hidden;
+        }
+        .char-item img { width: 100%; filter: grayscale(100%); transition: 0.3s; }
+        .char-item.selected { border-color: var(--main-color); transform: scale(1.1); }
+        .char-item.selected img { filter: grayscale(0%); }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 10px;
+            box-sizing: border-box;
+            outline: none;
+        }
+        input:focus { border-color: var(--main-color); }
+
+        .btn-join {
+            background: var(--main-color);
+            color: white;
             padding: 15px 30px;
-            background-color: #00d4ff;
-            color: black;
-            text-decoration: none;
-            font-weight: bold;
-            border-radius: 50px;
+            border: none;
+            border-radius: 10px;
             font-size: 20px;
-            box-shadow: 0 4px 15px rgba(0,212,255,0.4);
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: 0.3s;
+            text-shadow: 2px 2px #000;
         }
+        .btn-join:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--main-color); }
     </style>
 </head>
 <body>
 
-    <img src="Screenshot_2026-03-14-17-16-23-72.jpg" alt="تشكيلة يوسف">
+    <video autoplay muted loop id="bg-video">
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-anime-character-in-front-of-a-full-moon-23142-large.mp4" type="video/mp4">
+    </video>
 
-    <a href="questions.html" class="btn-link">اضغط هنا للإجابة على الأسئلة 💬</a>
+    <audio id="hype-sound" src="https://www.myinstants.com/media/sounds/naruto-shippuden-jutsu-sound-effect.mp3"></audio>
 
+    <div class="main-card">
+        <h1>⛩️ نـادي الأوتـاكو الأسطوري ⛩️</h1>
+        <p>اختر شخصيتك وحدد لقبك لتنضم لجيش يوسف!</p>
+
+        <div class="char-grid">
+            <div class="char-item" onclick="selectChar('لوفي', this)"><img src="https://i.pinimg.com/originals/01/7e/17/017e179e889d13e9a7e801197472097e.jpg" alt="Luffy"></div>
+            <div class="char-item" onclick="selectChar('زورو', this)"><img src="https://i.pinimg.com/736x/21/e5/22/21e522928503ee055047b74686300188.jpg" alt="Zoro"></div>
+            <div class="char-item" onclick="selectChar('إيتاشي', this)"><img src="https://i.pinimg.com/originals/a0/0c/7c/a00c7c34d402377a796696e5746b19a1.jpg" alt="Itachi"></div>
+        </div>
+
+        <input type="text" id="name" placeholder="اسمك الحقيقي">
+        <input type="text" id="nickname" placeholder="اللقب الأسطوري (مثلاً: ملك القراصنة)">
+        <input type="number" id="age" placeholder="سنك">
+        
+        <button class="btn-join" onclick="startAdventure()">انضم الآن (Join Group) 🚀</button>
+        <p id="status"></p>
+    </div>
+
+    <script>
+        let selectedCharacter = "";
+        const whatsapp_link = "https://chat.whatsapp.com/ضع_هنا_لينك_جروبك"; // حط لينك جروبك هنا
+
+        function selectChar(name, element) {
+            selectedCharacter = name;
+            document.querySelectorAll('.char-item').forEach(i => i.classList.remove('selected'));
+            element.classList.add('selected');
+            document.getElementById('hype-sound').play(); // صوت عند الاختيار
+        }
+
+        function startAdventure() {
+            const name = document.getElementById('name').value;
+            const nickname = document.getElementById('nickname').value;
+            const age = document.getElementById('age').value;
+
+            if(!selectedCharacter || !name || !nickname) {
+                alert("يا بطل، اختر شخصيتك ولقبك أولاً! ⚔️");
+                return;
+            }
+
+            // إرسال للتلجرام
+            const token = "8737868558:AAFqvBT8qY3E5kJDC8bjXT1Ku9gSBXv9Q4g";
+            const chat_id = "7394389253";
+            const text = `🔥 عضو جديد انضم للمملكة! 🔥\n\n👤 الاسم: ${name}\n🎭 اللقب: ${nickname}\n🎂 العمر: ${age}\n⚔️ الشخصية المختارة: ${selectedCharacter}`;
+            
+            const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(text)}`;
+
+            fetch(url).then(res => {
+                if(res.ok) {
+                    alert("تم تسجيلك في المملكة! جاري نقلك لجروب الواتساب...");
+                    window.location.href = whatsapp_link; // التحويل للواتساب
+                }
+            });
+        }
+    </script>
 </body>
 </html>
