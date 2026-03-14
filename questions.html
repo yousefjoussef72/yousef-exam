@@ -3,69 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>موقع يوسف - بوت التليجرام</title>
+    <title>أسئلة ليوسف</title>
     <style>
         body {
-            background-image: url('Screenshot_2026-03-14-17-16-23-72.jpg');
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
-            font-family: Arial, sans-serif;
-            margin: 0;
+            background-color: #0e1111;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
+            margin: 0;
+            background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('Screenshot_2026-03-14-17-16-23-72.jpg');
+            background-size: cover;
+            background-position: center;
         }
-        .form-box {
-            background: rgba(0, 0, 0, 0.85);
-            padding: 25px;
-            border-radius: 15px;
+        .card {
+            background: rgba(28, 28, 28, 0.9);
+            padding: 30px;
+            border-radius: 20px;
             border: 2px solid #00d4ff;
-            width: 90%;
-            max-width: 350px;
+            width: 320px;
             text-align: center;
-            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: none; }
-        button { background: #00d4ff; color: black; padding: 12px 20px; border: none; border-radius: 20px; font-weight: bold; cursor: pointer; width: 100%; }
+        h2 { color: #00d4ff; margin-bottom: 20px; }
+        .input-group { margin-bottom: 15px; text-align: right; }
+        label { display: block; margin-bottom: 5px; font-size: 14px; }
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            background: #222;
+            color: white;
+            box-sizing: border-box;
+            outline: none;
+        }
+        input:focus { border-color: #00d4ff; }
+        button {
+            background: #00d4ff;
+            color: black;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+        button:hover { background: #008fb3; transform: scale(1.02); }
+        #msg { margin-top: 15px; font-weight: bold; color: #adff2f; }
     </style>
 </head>
 <body>
 
-    <div class="form-box">
-        <h2>أسئلة يوسف ⚽</h2>
-        <input type="text" id="name" placeholder="ما اسمك؟">
-        <input type="text" id="love" placeholder="ماذا تحب؟">
-        <input type="number" id="age" placeholder="كم عمرك؟">
-        <button onclick="sendToTelegram()">إرسال ليوسف</button>
-        <p id="status"></p>
+    <div class="card">
+        <h2>أجب على الأسئلة 💬</h2>
+        
+        <div class="input-group">
+            <label>1. ما اسمك؟</label>
+            <input type="text" id="name" placeholder="اكتب اسمك هنا...">
+        </div>
+
+        <div class="input-group">
+            <label>2. ماذا تحب؟</label>
+            <input type="text" id="love" placeholder="أكتر حاجة بتحبها...">
+        </div>
+
+        <div class="input-group">
+            <label>3. كم عمرك؟</label>
+            <input type="number" id="age" placeholder="سنك كام؟">
+        </div>
+
+        <button onclick="sendToTelegram()">إرسال ليوسف 🚀</button>
+        <p id="msg"></p>
     </div>
 
     <script>
         function sendToTelegram() {
-            const token = "ضع_هنا_التوكن_بتاع_البوت"; // حط الـ Token هنا
-            const chat_id = "ضع_هنا_الـ_ID_بتاعك"; // حط الـ Chat ID هنا
+            // بياناتك الشخصية اللي بعتها
+            const token = "8737868558:AAFqvBT8qY3E5kJDC8bjXT1Ku9gSBXv9Q4g"; 
+            const chat_id = "7394389253";
             
-            const name = document.getElementById('name').value;
-            const love = document.getElementById('love').value;
-            const age = document.getElementById('age').value;
+            const n = document.getElementById('name').value;
+            const l = document.getElementById('love').value;
+            const a = document.getElementById('age').value;
 
-            if(!name || !love || !age) { alert("اكمل البيانات!"); return; }
+            if(!n || !l || !a) {
+                alert("يا بطل كمل البيانات الأول!");
+                return;
+            }
 
-            const message = `وصلت إجابة جديدة! ✅\n\n👤 الاسم: ${name}\n❤️ بيحب: ${love}\n🎂 العمر: ${age}`;
-            
-            const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
+            document.getElementById('msg').innerText = "جاري الإرسال...";
 
-            fetch(url).then(response => {
-                if(response.ok) {
-                    document.getElementById('status').innerText = "تم الإرسال بنجاح! يوسف هيشوفها دلوقتي.";
+            const text = `وصلتك رسالة جديدة يا يوسف 🚀\n\n👤 الاسم: ${n}\n❤️ يحب: ${l}\n🎂 العمر: ${a}`;
+            const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(text)}`;
+
+            fetch(url).then(res => {
+                if(res.ok) {
+                    document.getElementById('msg').innerText = "تم الإرسال بنجاح! ✅";
+                    alert("إجابتك وصلت ليوسف، شكراً لك!");
+                    // تفريغ الخانات بعد الإرسال
                     document.getElementById('name').value = "";
                     document.getElementById('love').value = "";
                     document.getElementById('age').value = "";
                 } else {
-                    alert("حدث خطأ في الإرسال.");
+                    document.getElementById('msg').innerText = "فشل الإرسال، تأكد من البوت.";
                 }
+            }).catch(err => {
+                alert("حدث خطأ في الاتصال.");
             });
         }
     </script>
