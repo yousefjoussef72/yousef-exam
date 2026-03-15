@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تسجيل الدخول | مملكة يوسف علاء</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Tajawal', sans-serif; background: #0a0a0a; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .setup-box { background: rgba(20, 20, 20, 0.9); padding: 40px; border-radius: 20px; border: 2px solid #ff003c; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 0 30px rgba(255, 0, 60, 0.3); }
+        h2 { color: #ffb700; margin-bottom: 30px; }
+        input { width: 100%; padding: 15px; margin-bottom: 20px; border-radius: 10px; border: 1px solid #333; background: #1a1a1a; color: white; box-sizing: border-box; }
+        .btn-next { background: #ff003c; color: white; border: none; padding: 15px 40px; border-radius: 10px; font-weight: 900; cursor: pointer; width: 100%; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <div class="setup-box">
+        <h2>⛩️ بيانات المحارب ⛩️</h2>
+        <form onsubmit="saveAndNext(event)">
+            <input type="text" id="reg-name" placeholder="اسمك الحقيقي" required>
+            <input type="email" id="reg-email" placeholder="بريدك الإلكتروني" required>
+            <button type="submit" class="btn-next">التالي: بوابة الأنمي ⚔️</button>
+        </form>
+    </div>
+
+    <script>
+        function saveAndNext(e) {
+            e.preventDefault();
+            // حفظ البيانات مؤقتاً في المتصفح
+            localStorage.setItem('warriorName', document.getElementById('reg-name').value);
+            localStorage.setItem('warriorEmail', document.getElementById('reg-email').value);
+            // الانتقال لصفحة الكاميرا والفيديوهات
+            window.location.href = 'gate.html'; 
+        }
+    </script>
+</body>
+</html>
