@@ -1,0 +1,49 @@
+:root { --main-red: #ff003c; --gold: #ffb700; --dark: #0a0a0a; }
+
+body { 
+    font-family: 'Tajawal', sans-serif; 
+    background: var(--dark); 
+    color: #fff; 
+    margin: 0; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    min-height: 100vh; 
+    overflow-x: hidden; 
+}
+
+#bg-video { 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    object-fit: cover; z-index: -1; opacity: 0.4; 
+}
+
+.glass-box { 
+    background: rgba(10, 10, 12, 0.92); 
+    backdrop-filter: blur(15px); 
+    border: 2px solid var(--main-red); 
+    width: 90%; max-width: 420px; 
+    padding: 30px; border-radius: 25px; 
+    text-align: center; 
+    box-shadow: 0 0 50px rgba(255, 0, 60, 0.4); 
+}
+
+input { 
+    width: 100%; padding: 15px; margin-bottom: 20px; 
+    border-radius: 12px; border: 1px solid #333; 
+    background: #111; color: white; box-sizing: border-box; 
+    outline: none; transition: 0.3s;
+}
+
+input:focus { border-color: var(--main-red); }
+
+.btn-main { 
+    width: 100%; padding: 18px; border: none; border-radius: 12px; 
+    background: linear-gradient(45deg, var(--main-red), #990024); 
+    color: white; font-size: 19px; font-weight: 900; 
+    cursor: pointer; box-shadow: 0 8px 20px rgba(255,0,60,0.4); 
+}
+
+.founder-footer { 
+    margin-top: 25px; color: var(--gold); 
+    font-weight: 900; border-top: 1px solid #333; padding-top: 15px; 
+}
