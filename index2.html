@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تحدي للصف الاول الثانوي- 1 ثانوى 2026</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap');
+        
+        :root { 
+            --main: #00d2ff; 
+            --main-glow: rgba(0, 210, 255, 0.5);
+            --bg: #0a0a0c; 
+            --panel: rgba(22, 27, 34, 0.85); 
+            --accent: #ff007a;
+            --success: #3fb950;
+            --danger: #ff4b4b;
+        }
+        
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Cairo', sans-serif; 
+            background: var(--bg) url('https://www.transparenttextures.com/patterns/carbon-fibre.png'); 
+            color: white; 
+            margin: 0; 
+            height: 100dvh;
+            display: flex; 
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .founder-header { 
+            text-align: center; 
+            padding: 15px; 
+            background: linear-gradient(90deg, transparent, rgba(255,0,122,0.8), transparent); 
+            font-weight: 900; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            box-shadow: 0 0 15px var(--accent); 
+            z-index: 10; 
+            font-size: 1.2rem;
+            text-shadow: 0 0 10px white;
+        }
+        
+        .app-container { flex: 1; position: relative; overflow: hidden; }
+
+        .tab-content {
+            display: none; height: 100%; overflow-y: auto; padding: 20px; padding-bottom: 80px; animation: fadeIn 0.3s ease;
+        }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .bottom-nav {
+            position: fixed; bottom: 0; width: 100%; background: #10141a; border-top: 2px solid #30363d;
+            display: flex; justify-content: space-around; padding: 10px 0; z-index: 100; backdrop-filter: blur(10px);
+        }
+
+        .nav-item {
+            color: #8b949e; background: none; border: none; font-family: inherit; font-size: 0.9rem; font-weight: bold;
+            display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; transition: 0.3s; width: 25%;
+        }
+        .nav-item.active { color: var(--main); text-shadow: 0 0 10px var(--main-glow); }
+        .nav-icon { font-size: 1.5rem; }
+
+        .card { 
+            background: rgba(13, 17, 23, 0.9); border: 2px solid var(--main); padding: 25px; 
+            border-radius: 20px; text-align: center; box-shadow: 0 0 20px var(--main-glow); backdrop-filter: blur(5px);
+        }
+        
+        .btn-opt { 
+            display: block; width: 100%; margin: 12px 0; padding: 15px; background: rgba(255,255,255,0.05); 
+            border: 1px solid var(--main); color: white; border-radius: 12px; cursor: pointer; 
+            transition: all 0.2s; font-size: 1.1rem; font-family: inherit; font-weight: bold;
+        }
+        .btn-opt:active { transform: scale(0.95); }
+        
+        .correct-ans { background: var(--success) !important; color: white !important; border-color: var(--success); box-shadow: 0 0 15px var(--success); }
+        .wrong-ans { background: var(--danger) !important; color: white !important; border-color: var(--danger); animation: shake 0.4s; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 50% { transform: translateX(10px); } 75% { transform: translateX(-10px); } }
+
+        .chat-container { display: flex; flex-direction: column; height: 100%; }
+        #chat-content { flex: 1; overflow-y: auto; padding-right: 5px; }
+        .msg-in { background: #21262d; padding: 12px; border-radius: 12px; margin-bottom: 10px; border-right: 4px solid var(--main); font-size: 0.95rem; word-wrap: break-word;}
+        .chat-input-area { display: flex; gap: 10px; margin-top: 15px; }
+        .chat-input-area input { flex: 1; padding: 12px; border-radius: 10px; border: 1px solid #30363d; background: #161b22; color: white; font-family: inherit; font-size: 1rem; }
+        .chat-input-area button { padding: 0 20px; background: var(--main); border: none; border-radius: 10px; color: #000; font-weight: bold; font-family: inherit; cursor: pointer; }
+
+        .online-user { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: rgba(63, 185, 80, 0.1); border-radius: 12px; margin-bottom: 10px; border: 1px solid rgba(63, 185, 80, 0.3); }
+
+        /* تنسيقات بنك الأسئلة بالكامل */
+        .syllabus-header { text-align: center; color: #58a6ff; border-bottom: 2px solid #30363d; padding-bottom: 15px; margin-bottom: 30px; margin-top:0; font-size: 1.5rem;}
+        .subject-title, .category { margin-top: 40px; padding: 12px; background: #161b22; font-size: 1.2em; font-weight: bold; color: #ffffff; border-radius: 4px; }
+        .subject-title { border-right: 5px solid #58a6ff; }
+        .category { border-right: 5px solid #ff4b2b; }
+        
+        ol.q-list { counter-reset: custom-counter; list-style: none; padding: 0; }
+        ol.q-list li { background: #21262d; margin: 12px 0; padding: 15px 20px; border-radius: 6px; border: 1px solid #30363d; position: relative; line-height: 1.8; font-size: 0.95rem;}
+        ol.q-list li::before { counter-increment: custom-counter; content: counter(custom-counter) "- "; color: #58a6ff; font-weight: bold; margin-left: 5px; }
+        
+        .hard { border-right: 4px solid #d2a8ff !important; }
+        .very-hard { border-right: 4px solid #ff7b72 !important; }
+        .impossible { border-right: 4px solid #ff0000 !important; background: #2d1114 !important; }
+        
+        .tag { font-size: 0.8em; padding: 2px 6px; border-radius: 4px; margin-right: 10px; float: left; }
+        .tag-hard { background: #d2a8ff; color: #000; }
+        .tag-very-hard { background: #ff7b72; color: #000; }
+        .tag-impossible { background: #ff0000; color: #fff; font-weight: bold; }
+
+        /* تنسيقات الخيارات (أسئلة اختيارية) */
+        .mcq-box { margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .mcq-box label { background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 6px; cursor: pointer; border: 1px solid #30363d; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .mcq-box label:hover { background: rgba(0, 210, 255, 0.1); border-color: var(--main); }
+        .mcq-box input[type="radio"] { accent-color: var(--main); }
+    </style>
+</head>
+<body>
+
+<div class="founder-header">المؤسس الأول : Yousef = غابيمارو 🔥</div>
+
+<div class="app-container">
+    
+    <div id="game-tab" class="tab-content active">
+        <div class="card">
+            <div id="lvl-tag" style="color: var(--accent); font-size: 1rem; font-weight: bold; margin-bottom: 10px;">المستوى: جاري التحميل...</div>
+            <h2 id="q-text" style="line-height: 1.5; margin-bottom: 25px; font-size: 1.3rem;">جاري تجهيز التحدي...</h2>
+            <div id="opts"></div>
+            
+            <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #30363d; display: flex; justify-content: space-between; font-size: 1.1rem;">
+                <div>نقاطك: <span id="score" style="color: var(--main); font-weight: 900; font-size: 1.3rem;">0</span></div>
+                <div id="rank" style="color: var(--success); font-weight: bold;">مستجد</div>
+            </div>
+        </div>
+        <button onclick="addQuestion()" style="display:block; width:100%; margin-top:20px; background:none; color:#8b949e; border:2px dashed #8b949e; padding: 15px; border-radius: 12px; font-weight:bold;">+ اقترح سؤالاً جديداً للعبة</button>
+    </div>
+
+    <div id="chat-tab" class="tab-content">
+        <div class="chat-container">
+            <h3 style="text-align:center; color: var(--main); margin-top:0;">💬 شات الأبطال</h3>
+            <div id="chat-content"></div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-msg" placeholder="اكتب رسالتك هنا...">
+                <button onclick="sendMsg()">إرسال</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="leaderboard-tab" class="tab-content">
+        <h3 style="color: var(--main); text-align: center; margin-top:0;">🏆 المتصدرين و 🟢 المتصلون</h3>
+        <div id="online-list"></div>
+    </div>
+
+    <div id="syllabus-tab" class="tab-content">
+        <h1 class="syllabus-header">100 سؤال نواتج تعلم: الصف الأول الثانوي (الترم الثاني 2026)</h1>
+
+        <div class="subject-title">أولاً: الفيزياء (الحركة الدائرية، الجاذبية الكونية، الشغل والطاقة)</div>
+        <ol class="q-list">
+            <li class="hard">جسم يتحرك في مسار دائري بسرعة ثابتة، إذا زادت القوة الجاذبة المركزية للضعف وقل نصف القطر للنصف، ماذا يحدث للسرعة المماسية؟<span class="tag tag-hard">صعب</span></li>
+            <li class="hard">قمران صناعيان A و B يدوران حول الأرض، نصف قطر مدار A ضعف مدار B، احسب النسبة بين الزمن الدوري لهما.</li>
+            <li class="hard">سيارة تتحرك في منحنى دائري يميل على الأفقي بزاوية (θ)، استنتج رياضياً أقصى سرعة آمنة مع إهمال قوة الاحتكاك.</li>
+            <li class="hard">سقط جسم سقوطاً حراً من ارتفاع (h)، عند أي ارتفاع تكون طاقة حركته ضعف طاقة وضعه؟</li>
+            <li class="hard">إذا كانت قوة التجاذب بين كتلتين هي (F)، كم يجب أن تتغير المسافة بينهما لتصبح القوة (F/9)؟</li>
+            <li class="hard">رجل يدفع عربة بقوة تصنع زاوية 60 مع الأفقي، إذا بذل شغلاً (W)، فكم تكون القوة اللازمة لبذل نفس الشغل إذا دفعها أفقياً؟</li>
+            <li class="hard">جسم كتلته 2 كجم مربوط في خيط ويدور في مستوى رأسي، احسب الفرق بين الشد في أعلى نقطة وأسفل نقطة.</li>
+            <li class="hard">احسب النسبة بين عجلة الجاذبية على سطح الأرض وعجلة الجاذبية على ارتفاع يساوي ضعف نصف قطر الأرض.</li>
+            <li class="hard">إذا تضاعفت كمية تحرك جسم، فما هو مقدار التغير النسبي في طاقة حركته؟</li>
+            <li class="hard">منحنى السرعة المدارية للقمر الصناعي مع مقلوب الجذر التربيعي لنصف القطر يمثل خطاً مستقيماً، ماذا يمثل الميل؟</li>
+            <li class="very-hard">جسم ينزلق على مسار دائري أملس كروي من أعلى نقطة، عند أي زاوية سيترك الجسم سطح الكرة؟<span class="tag tag-very-hard">صعب جداً</span></li>
+            <li class="very-hard">كيف يمكن لقمر صناعي أن يدور في مدار متزامن مع الأرض (Geo-stationary) وما هي الشروط الدقيقة لكتلته وسرعته؟</li>
+            <li class="very-hard">في البندول البسيط، ارسم العلاقة البيانية بين مربع السرعة والإزاحة الرأسية، واستنتج قيمة الميل.</li>
+            <li class="very-hard">إذا كان الشغل المبذول لزيادة سرعة سيارة من 10 إلى 20 م/ث هو W، فما الشغل لزيادتها من 20 إلى 30 م/ث؟</li>
+            <li class="very-hard">قمر صناعي يدور حول كوكب كتلته مجهولة، إذا علمنا فقط سرعته المدارية ومحيط مداره، استنتج كتلة الكوكب.</li>
+            <li class="impossible">إذا تم حفر نفق مستقيم عبر مركز الأرض بالكامل، وأسقطنا جسماً فيه، أثبت رياضياً أن حركته ستكون توافقية بسيطة مع إهمال الاحتكاك.<span class="tag tag-impossible">مستحيل</span></li>
+            <li class="impossible">احسب سرعة الهروب لجسم من جاذبية الأرض إذا تم إطلاقه من قمة جبل ارتفاعه يوازي نصف قطر الأرض.</li>
+            <li class="impossible">هل يمكن لقوة الجاذبية المركزية أن تبذل شغلاً في مسار إهليجي (بيضاوي) وليس دائري؟ فسر رياضياً.</li>
+            <li class="impossible">أثبت أن الطاقة الميكانيكية الكلية لقمر صناعي تساوي القيمة السالبة لطاقة حركته.</li>
+            <li class="impossible">تخيل كوكباً كثافته تتغير تدريجياً من المركز للسطح، كيف ستحسب عجلة الجاذبية عند نقطة داخله؟</li>
+        </ol>
+
+        <div class="subject-title">ثانياً: الكيمياء (الكيمياء الحرارية، الكيمياء النووية)</div>
+        <ol class="q-list" start="21">
+            <li class="hard">تفاعل طارد للحرارة، إذا كانت طاقة المواد المتفاعلة 500kJ وطاقة التنشيط 100kJ، و ΔH=-200kJ، احسب طاقة المواد الناتجة.<span class="tag tag-hard">صعب</span></li>
+            <li class="hard">احسب حرارة التكوين القياسية لغاز الميثان باستخدام قانون هس، بمعلومية حرارة احتراق (C, H2, CH4).</li>
+            <li class="hard">عينة مشعة تحتوي على 1000 نواة، فترة عمر النصف لها 5 أيام. كم نواة تتبقى بعد 20 يوماً؟</li>
+            <li class="hard">قارن بين قوة الترابط النووي لنواة الحديد-56 ونواة اليورانيوم-235 بناءً على منحنى الاستقرار.</li>
+            <li class="hard">احسب كمية الحرارة المنطلقة عند ذوبان 10 جم من هيدروكسيد الصوديوم في الماء لعمل لتر من المحلول إذا ارتفعت الحرارة 4 درجات.</li>
+            <li class="hard">لماذا لا يمكن قياس المحتوى الحراري لمادة معينة بشكل مباشر، بل نقيس التغير فيه (ΔH)؟</li>
+            <li class="hard">نواة عنصر (X) فقدت 2 جسيم ألفا و 3 جسيمات بيتا لتتحول إلى رصاص (Pb-206, 82)، ما هو العنصر X؟</li>
+            <li class="hard">احسب طاقة الترابط النووي لكل نيوكليون في نواة الهيليوم إذا علمت الكتلة الفعلية وكتلة مكوناتها.</li>
+            <li class="hard">ما هو الفرق الجوهري بين الانشطار النووي في المفاعل والانشطار في القنبلة الذرية من حيث الكتلة الحرجة؟</li>
+            <li class="hard">ارسم مخطط طاقة لتفاعل ماص للحرارة موضحاً عليه أثر إضافة عامل حفاز.</li>
+            <li class="very-hard">إذا كان تفاعل احتراق الجرافيت لتكوين ثاني أكسيد الكربون يمر بخطوتين، لماذا يفضل استخدام قانون هس بدلاً من التجربة المباشرة للخطوة الأولى؟<span class="tag tag-very-hard">صعب جداً</span></li>
+            <li class="very-hard">اشرح كيف يمكن لنظير مستقر أن يتحول إلى نظير مشع عن طريق التفاعل النووي الصناعي (القذف بالنيوترونات).</li>
+            <li class="very-hard">في مسعر القنبلة، إذا لم نقم بخصم السعة الحرارية للمسعر نفسه، كيف سيؤثر ذلك على قيمة حرارة الاحتراق المحسوبة؟</li>
+            <li class="very-hard">تفسير ظاهرة "نقص الكتلة" عند تكوين النواة باستخدام معادلة أينشتاين، ولماذا لا نلاحظها في التفاعلات الكيميائية العادية؟</li>
+            <li class="very-hard">عينة مشعة نشاطها 800 إشعاع/ثانية، وبعد ساعتين أصبح 50 إشعاع/ثانية. احسب ثابت الانحلال (λ).</li>
+            <li class="impossible">إذا استطعنا عكس عملية الانشطار النووي لليورانيوم، هل سيكون التفاعل طارداً أم ماصاً للحرارة ولماذا؟<span class="tag tag-impossible">مستحيل</span></li>
+            <li class="impossible">أثبت رياضياً أن فترة عمر النصف (t1/2) لا تعتمد على الكمية الابتدائية للمادة المشعة.</li>
+            <li class="impossible">في الاندماج النووي بالشمس، تتحول 4 أنوية هيدروجين لنواة هيليوم، احسب بدقة نسبة الكتلة المتحولة لطاقة.</li>
+            <li class="impossible">تخيل تفاعلاً كيميائياً تكون فيه إنثالبي النواتج يساوي إنثالبي المتفاعلات تماماً عند الصفر المطلق، هل يحدث التفاعل؟</li>
+            <li class="impossible">احسب كمية الطاقة الناتجة من فناء 1 جرام من المادة والمادة المضادة معاً، وقارنها بطاقة قنبلة هيروشيما.</li>
+        </ol>
+
+        <div class="subject-title">ثالثاً: الأحياء (الوراثة وتداخل فعل الجينات، التصنيف)</div>
+        <ol class="q-list" start="41">
+            <li class="hard">تزاوج فردان كلاهما يحمل فصيلة دم (A)، فظهر في الأبناء فصيلة (O)، ما هو التركيب الجيني للآباء؟<span class="tag tag-hard">صعب</span></li>
+            <li class="hard">اشرح حالة الجينات المتكاملة في نبات بسلة الزهور وكيف تختلف نسبتها (9:7) عن قانون مندل الثاني.</li>
+            <li class="hard">لماذا يعتبر مرض عمى الألوان أكثر انتشاراً في الذكور عن الإناث؟</li>
+            <li class="hard">قارن بين البدائيات والطلائعيات من حيث تركيب النواة والعضيات الغشائية.</li>
+            <li class="hard">ما هو الأساس العلمي الذي بنى عليه "كارل لينيوس" التسمية الثنائية للكائنات الحية؟</li>
+            <li class="hard">كيف تفرق بين ذكر وأنثى حشرة الدروسوفيلا من حيث الوراثة المرتبطة بالجنس (لون العين)؟</li>
+            <li class="hard">تزاوجت فئران صفراء معاً، ما نسبة الفاقد (الميت) في النسل الناتج ولماذا؟ (الجينات المميتة).</li>
+            <li class="hard">فصيلة الدم (AB) تعتبر مستقبلاً عاماً، بينما (O) معطي عام، فسر ذلك مناعياً وجينياً.</li>
+            <li class="hard">صنف فطر المشروم موضحاً المملكة، الشعبة، وطريقة التغذية.</li>
+            <li class="hard">كيف يمكن استخدام البصمة الوراثية لإثبات أو نفي البنوة في حالات النزاع؟</li>
+            <li class="very-hard">ما هو تفسير ظهور فصيلة دم (O) لأبوين فصيلة دمهما (AB)؟ (ابحث عن ظاهرة بومباي).<span class="tag tag-very-hard">صعب جداً</span></li>
+            <li class="very-hard">كيف تفسر وراثياً ولادة طفل مصاب بمتلازمة داون يحمل فصيلة دم غير متوافقة مع والديه؟</li>
+            <li class="very-hard">إذا حدث عبور وراثي بين جينين مرتبطين، كيف يؤثر ذلك على النسب المندلية المتوقعة؟</li>
+            <li class="very-hard">لماذا لا يمكن تصنيف الفيروسات والبريونات ضمن الممالك الخمس الكلاسيكية (تصنيف وايتكر)؟</li>
+            <li class="very-hard">اشرح كيف تورث صفة الصلع المبكر في الإنسان مع توضيح أثر الهرمونات الجنسية (الجينات المتأثرة بالجنس).</li>
+            <li class="impossible">هل يمكن أن تتواجد مورثات الميتوكوندريا في الحيوان المنوي وتنتقل للجنين؟ ولماذا تعتبر الوراثة الميتوكوندرية أنثوية فقط؟<span class="tag tag-impossible">مستحيل</span></li>
+            <li class="impossible">في كائن افتراضي، تم اكتشاف نظام تحديد جنس خماسي الأليلات، صمم مربع بانيت لتوضيح احتمالات التزاوج.</li>
+            <li class="impossible">كيف تقوم بتصنيف كائن حي يمتلك جداراً خلوياً كيتينياً، ويقوم بالبناء الضوئي، ويعيش في الينابيع الحارة جداً؟</li>
+            <li class="impossible">إذا كانت صفة لون الريش في الطيور محكومة بـ 4 أزواج من الجينات المتراكمة، كم عدد الفينوتيبات (المظاهر) المحتملة؟</li>
+            <li class="impossible">صمم خريطة وراثية لجين افتراضي يسبب مناعة ضد الإشعاع بناءً على نسب الارتباط والعبور في 3 أجيال.</li>
+        </ol>
+
+        <div class="subject-title">رابعاً: الرياضيات (المصفوفات، المتجهات، الخط المستقيم، حساب المثلثات)</div>
+        <ol class="q-list" start="61">
+            <li class="hard">إذا كانت أ مصفوفة متماثلة وشبه متماثلة في نفس الوقت، أثبت أن أ هي المصفوفة الصفرية.<span class="tag tag-hard">صعب</span></li>
+            <li class="hard">حل نظام المعادلات الخطية الآتي باستخدام المعكوس الضربي للمصفوفة: 2س - ص = 3، وس + 3ص = 5.</li>
+            <li class="hard">أوجد الصور المختلفة لمعادلة الخط المستقيم المار بالنقطة (2، -1) وعمودي على المتجه ن = (3، 4).</li>
+            <li class="hard">أثبت صحة المتطابقة: (جتا س / 1 - جا س) + (1 - جا س / جتا س) = 2 قا س.</li>
+            <li class="hard">قطاع دائري محيطه 12 سم ومساحته 9 سم مربع، أوجد زاويته المركزية بالتقدير الدائري.</li>
+            <li class="hard">أ ب جـ مثلث، باستخدام المتجهات أثبت أن القطعة المستقيمة الواصلة بين منتصفي ضلعين توازي الثالث وتساوي نصفه.</li>
+            <li class="hard">إذا كانت أ = [2 3]، ب = [1 -1]، أوجد المصفوفة س بحيث أ س = ب.</li>
+            <li class="hard">من قمة برج ارتفاعه 50م، قيست زاوية انخفاض قمة وقاعدة مبنى فكانتا 30 و 45 درجة، أوجد ارتفاع المبنى.</li>
+            <li class="hard">حل المتباينة الخطية الآتية بيانياً وحدد منطقة الحل: س + ص ≤ 4، وس ≥ 0، وص ≥ 0.</li>
+            <li class="hard">أوجد مساحة المثلث الذي رؤوسه النقط (1، 2)، (-1، 3)، (2، -1) باستخدام المحددات.</li>
+            <li class="very-hard">إذا كانت المصفوفة أ على النظم 3×3 ومحددها = 5، أوجد قيمة محدد (2 أ^مرفقة).<span class="tag tag-very-hard">صعب جداً</span></li>
+            <li class="very-hard">باستخدام البرمجة الخطية، أوجد القيمة العظمى لدالة الهدف ر = 3س + 5ص تحت قيود معقدة (4 متباينات).</li>
+            <li class="very-hard">أثبت باستخدام المتجهات أن منصفات زوايا المثلث تتقاطع في نقطة واحدة.</li>
+            <li class="very-hard">أوجد الحل العام للمعادلة المثلثية: جا 2س = جتا 3س.</li>
+            <li class="very-hard">طول العمود المرسوم من النقطة (ك، 0) على المستقيم 3س - 4ص - 12 = 0 يساوي 2، أوجد قيم ك.</li>
+            <li class="impossible">أثبت أن المعكوس الضربي لمصفوفة مربعة (ن×ن) من الرتبة n موجود فقط وفقط إذا كان محددها لا يساوي صفراً (إثبات نظري كامل).<span class="tag tag-impossible">مستحيل</span></li>
+            <li class="impossible">باستخدام حساب المثلثات، استنتج صيغة لمساحة مضلع منتظم عدد أضلاعه (ن) ومرسوم داخل دائرة نصف قطرها (نق).</li>
+            <li class="impossible">أثبت أن أي مصفوفة مربعة يمكن كتابتها كمجموع مصفوفتين: إحداهما متماثلة والأخرى شبه متماثلة.</li>
+            <li class="impossible">استخدم المتجهات لإثبات نظرية طالس في الهندسة المستوية.</li>
+            <li class="impossible">حل المعادلة المثلثية الآتية جبرياً: جا^6(س) + جتا^6(س) = 1/4 (لجميع قيم س الممكنة).</li>
+        </ol>
+
+        <div class="subject-title">خامساً: الفلسفة والتفكير العلمي (خصائص التفكير العلمي وخطواته)</div>
+        <ol class="q-list" start="81">
+            <li class="hard">"العلم لا يعطي حقائق نهائية مطلقة". ناقش هذه العبارة في ضوء خصائص المعرفة العلمية (الاحتمالية).<span class="tag tag-hard">صعب</span></li>
+            <li class="hard">كيف يمكن تطبيق خطوة "فرض الفروض" في التفكير العلمي لحل مشكلة الازدحام المروري في القاهرة؟</li>
+            <li class="hard">قارن بين العوائق الذاتية والموضوعية التي تواجه الباحث العلمي مع ضرب أمثلة من الواقع.</li>
+            <li class="hard">ما الفرق بين الملاحظة العابرة والملاحظة العلمية الدقيقة في منهج البحث؟</li>
+            <li class="hard">كيف يساهم "التفكير الناقد" في تنقية الأخبار العلمية المزيفة على منصات التواصل الاجتماعي؟</li>
+            <li class="hard">"التراكمية" من أهم سمات العلم. وضح كيف بُنيت فيزياء الكم على أنقاض أجزاء من الكلاسيكية وتكاملت معها.</li>
+            <li class="hard">هل يمكن للعالم أن يتجرد تماماً من مشاعره وميوله (الموضوعية) أثناء إجراء تجربة اجتماعية؟</li>
+            <li class="hard">استنتج العلاقة بين "الخيال" العلمي والاكتشافات التكنولوجية الحديثة.</li>
+            <li class="hard">حلل الموقف الفلسفي وراء عبارة: "نحن نرى ما نريد أن نراه، لا ما هو موجود بالفعل" وعلاقتها بالتجريب.</li>
+            <li class="hard">صمم نموذجاً مصغراً لخطوات التفكير العلمي لحل مشكلة "تلوث النيل".</li>
+            <li class="very-hard">إذا كان العلم يعتمد على "الحواس" والحواس قابلة للخداع، فكيف نطمئن ليقينية القوانين العلمية؟<span class="tag tag-very-hard">صعب جداً</span></li>
+            <li class="very-hard">ناقش التناقض الظاهري بين "الحتمية العلمية" و"ميكانيكا الكم الاحتمالية" من منظور فلسفي.</li>
+            <li class="very-hard">هل التكنولوجيا تطبيق للعلم أم أن العلم نتيجة لتطور التكنولوجيا؟ (أيهما سبق الآخر تاريخياً).</li>
+            <li class="very-hard">"الاستقراء الناقص" هو أساس العلم التجريبي. كيف نعمم حكماً على كل المعادن بأنها تتمدد بالحرارة رغم أننا لم نختبر كل معادن الكون؟</li>
+            <li class="very-hard">ما هي الأخلاقيات الفلسفية التي يجب أن تحكم أبحاث "الهندسة الوراثية" و "الاستنساخ البشري"؟</li>
+            <li class="impossible">هل الذكاء الاصطناعي قادر على ممارسة "التفكير الإبداعي والابتكار العلمي" أم أنه يعيد تدوير المعرفة البشرية فقط؟<span class="tag tag-impossible">مستحيل</span></li>
+            <li class="impossible">لو أن قوانين الفيزياء تتغير بمرور الزمن في الكون، كيف يمكن بناء "علم" ثابت للمستقبل؟</li>
+            <li class="impossible">كيف تثبت فلسفياً أن العالم المحسوس موجود بالفعل وليس مجرد محاكاة عقلية داخل حاسوب عملاق؟ (تجربة الدماغ في وعاء).</li>
+            <li class="impossible">حلل معضلة "السببية": هل نقيس حقاً العلاقة السببية بين ظاهرتين أم نقيس فقط التزامن المتكرر بينهما (رأي ديفيد هيوم)؟</li>
+            <li class="impossible">السؤال الأخير: بناءً على كل ما درسته، إذا تعارض استنتاج رياضي قطعي مع ملاحظة بيولوجية مؤكدة، أيهما يُعدل ليتوافق مع الآخر؟</li>
+        </ol>
+
+        <h1 class="syllabus-header" style="margin-top: 40px;">100 سؤال: من الصعب إلى المستحيل</h1>
+
+        <div class="category">المستوى الأول: تحديات منطقية وعلمية (صعب)</div>
+        <ol class="q-list">
+            <li>كيف يمكن تفسير "مفارقة فيرمي" بوجود مليارات الكواكب وصمت الكون التام؟</li>
+            <li>اشرح الفرق الجوهري بين ميكانيكا الكم والنسبية العامة بلغة مبسطة.</li>
+            <li>إذا سقطت شجرة في غابة ولم يسمعها أحد، هل أحدثت صوتاً فيزيائياً أم مجرد اهتزاز؟</li>
+            <li>ما هو العدد الأولي الذي يليه عدد أولي آخر بفرق 2 فقط بعد المليار الأول؟</li>
+            <li>كيف يمكن لجهاز حاسوب كمي تفكيك تشفير AES-256 في ثوانٍ؟</li>
+            <li>لماذا يتمدد الكون بسرعة أكبر من سرعة الضوء إذا كان الضوء هو أسرع شيء؟</li>
+            <li>هل الرياضيات اختراع بشري أم لغة كونية موجودة مسبقاً اكتشفناها؟</li>
+            <li>كيف يعمل "تأثير المراقب" في تجربة الشق المزدوج على تغيير سلوك المادة؟</li>
+            <li>ما هي الكتلة الفعلية للمعلومات الرقمية الموجودة على كوكب الأرض حالياً؟</li>
+            <li>هل يمكن بناء محرك "وارب" (Warp Drive) دون انتهاك قوانين الفيزياء الحرارية؟</li>
+            <li>كيف تفسر "الوعي" من منظور مادي بحت دون اللجوء للميتافيزيقا؟</li>
+            <li>لماذا يوجد المادة في الكون بنسبة أكبر من المادة المضادة؟</li>
+            <li>هل الوقت بُعد مكاني رابع أم مجرد مقياس للتغير في المادة؟</li>
+            <li>ما هو الشكل الهندسي الحقيقي للكون (مسطح، كروي، أم سرجي)؟</li>
+            <li>كيف يمكن لنظام مغلق أن يقلل الإنتروبيا (الفوضى) بداهةً؟</li>
+            <li>هل الذكاء الاصطناعي قادر على امتلاك "إرادة حرة" أم هو مجرد خوارزمية معقدة؟</li>
+            <li>ما هو التفسير الرياضي الدقيق لظاهرة "التشابك الكمي"؟</li>
+            <li>كيف نحدد عمر الكون بدقة دون الاعتماد على ثابت هابل المتغير؟</li>
+            <li>لماذا يحلم البشر بأشياء لم يسبق لهم رؤيتها في الواقع؟</li>
+            <li>هل يمكن للجاذبية أن تكون قوة كهرومغناطيسية في أبعاد أعلى؟</li>
+        </ol>
+
+        <div class="category">المستوى الثاني: ألغاز الفيزياء والثقوب السوداء (صعب جداً)</div>
+        <ol class="q-list" start="21">
+            <li>ماذا يحدث للمعلومات التي تسقط داخل ثقب أسود (مفارقة المعلومات)؟</li>
+            <li>هل يمكن تفسير الوعي البشري كنتيجة للعمليات الكمومية داخل الأنابيب الدقيقة في الدماغ؟</li>
+            <li>كيف يمكننا إثبات وجود "المادة المظلمة" دون رصدها مباشرة؟</li>
+            <li>ما هو مصير الكون النهائي: التجمد العظيم، التمزق الكبير، أم الانسحاق الشديد؟</li>
+            <li>هل الأرقام التخيلية لها وجود مادي في بنية الكون؟</li>
+            <li>كيف نجمع بين القوى الأربع الأساسية في "نظرية كل شيء"؟</li>
+            <li>ما هي طبيعة "الطاقة المظلمة" التي تدفع المجرات بعيداً عنا؟</li>
+            <li>إذا عدت بالزمن وقتلت جدك، فمن الذي قتله؟ (مفارقة الجد).</li>
+            <li>هل الثقوب الدودية جسور مكانية أم مجرد احتمالات رياضية مستحيلة؟</li>
+            <li>كيف يمكن لجسيم أن يتواجد في مكانين في آن واحد (التراكب)؟</li>
+            <li>ما هي قيمة "ثابت البنية الدقيقة" ولماذا هو بهذا الرقم تحديداً؟</li>
+            <li>هل نحن نعيش في محاكاة حاسوبية فائقة؟ وما هو الدليل المضاد؟</li>
+            <li>ماذا يوجد وراء أفق الحدث؟</li>
+            <li>هل الزمان والمكان كيان واحد (الزمكان) أم منفصلان في ظروف معينة؟</li>
+            <li>كيف تنشأ الكتلة من "حقل هيغز"؟</li>
+            <li>هل يمكن السفر عبر الزمن باستخدام "أسطوانة تيبلر"؟</li>
+            <li>ما هي الطبيعة الحقيقية للزمن داخل الثقب الأسود؟</li>
+            <li>هل يمكن للضوء أن يتوقف تماماً عن الحركة؟</li>
+            <li>ما هي "نظرية الأوتار" وكيف تفسر الأبعاد الـ 11؟</li>
+            <li>لماذا لا يمكننا رؤية الأبعاد الإضافية إذا كانت موجودة؟</li>
+        </ol>
+
+        <div class="category">المستوى الثالث: مفارقات فلسفية ورياضية (شبه مستحيل)</div>
+        <ol class="q-list" start="41">
+            <li>هل الوعي هو الذي يخلق الواقع أم الواقع هو الذي يخلق الوعي؟</li>
+            <li>حل معضلة "السفينة لثيسيوس": إذا استبدلت كل قطع السفينة، هل تظل هي نفسها؟</li>
+            <li>هل يمكن لآلة أن تفكر فعلياً (اختبار تورينج القوي)؟</li>
+            <li>ما هو تعريف "الحقيقة" المطلقة بعيداً عن التصور البشري؟</li>
+            <li>إذا كان الله كلي القدرة، فهل يمكنه خلق صخرة يعجز عن حملها؟</li>
+            <li>هل الأخلاق نتاج تطوري بيولوجي أم قوانين كونية ثابتة؟</li>
+            <li>مفارقة "بانيش-تارسكي": كيف يمكن تقسيم كرة لإعادة تركيب كرتين متطابقتين؟</li>
+            <li>هل يمكن إثبات صحة أي نظام رياضي من داخل النظام نفسه (مبرهنة غودل)؟</li>
+            <li>ما هو أصل "المعنى" في عالم تحكمه الصدفة الفيزيائية؟</li>
+            <li>هل "أنا" التي كانت بالأمس هي نفس "أنا" اليوم رغم تغير الخلايا؟</li>
+            <li>كيف يمكن للغة المحدودة أن تصف كوناً غير محدود؟</li>
+            <li>هل الموت هو نهاية الوعي أم مجرد انتقال لنوع آخر من الوجود؟</li>
+            <li>لماذا يوجد "شيء" بدلاً من "لاشيء"؟</li>
+            <li>هل يمكننا الوثوق بحواسنا إذا كانت مجرد إشارات كهربائية؟</li>
+            <li>ما هي حدود العقل البشري في فهم الكون؟</li>
+            <li>هل هناك "جمال" موضوعي أم هو مجرد تفاعل كيميائي في الدماغ؟</li>
+            <li>كيف يمكن التوفيق بين القدر (الحتمية) والمسؤولية الشخصية؟</li>
+            <li>هل الكون حتمي أم عشوائي في جوهره؟</li>
+            <li>ما هي طبيعة "الآن"؟ وهل هي لحظة عالمية أم نسبية لكل مراقب؟</li>
+            <li>هل يمكن للعلم أن يجيب على سؤال "لماذا" أم يكتفي بـ "كيف"؟</li>
+        </ol>
+
+        <div class="category">المستوى الرابع: معضلات القرن الحادي والعشرين (خارق للذكاء)</div>
+        <ol class="q-list" start="61">
+            <li>حل مسألة "P vs NP" في علوم الحاسوب.</li>
+            <li>إثبات "فرضية ريمان" المتعلقة بتوزيع الأعداد الأولية.</li>
+            <li>توقع سلوك "معادلات نافيير-ستوكس" في ميكانيكا السوائل والاضطراب.</li>
+            <li>كيف يمكن تحقيق "الاندماج النووي البارد" في درجة حرارة الغرفة؟</li>
+            <li>ما هي الآلية الحيوية الدقيقة التي تسبب الشيخوخة وهل يمكن عكسها؟</li>
+            <li>كيف يمكن تخزين ذاكرة الإنسان بالكامل على شريحة سيلكون؟</li>
+            <li>هل يمكن بناء ذكاء اصطناعي عام (AGI) يتجاوز قدرة البشر في الإبداع؟</li>
+            <li>ما هو الجين المسؤول عن "الوعي الذاتي"؟</li>
+            <li>كيف يمكن تفسير ظاهرة "تخاطر الأفكار" (إن وجدت) فيزيائياً؟</li>
+            <li>هل يمكن التلاعب بالجاذبية عبر الموجات الصوتية؟</li>
+            <li>ماذا كان يوجد قبل "الانفجار العظيم" بثانية واحدة؟</li>
+            <li>هل يمكننا التواصل مع حضارات فضائية باستخدام "النيوترينو"؟</li>
+            <li>كيف نصنع مادة ذات موصلية فائقة في درجات الحرارة العادية؟</li>
+            <li>هل يمكن تحويل المادة إلى طاقة بنسبة 100% دون فقدان؟</li>
+            <li>ما هو التفسير النهائي لمفارقة "قطة شرودنغر"؟</li>
+            <li>هل الفضاء "فارغ" حقاً أم هو بحر من الطاقة الافتراضية؟</li>
+            <li>كيف نتحكم في "التطور البشري" جينياً دون تدمير النوع؟</li>
+            <li>هل يمكن للنانوتكنولوجي إعادة بناء الموتى؟</li>
+            <li>ما هي طبيعة "المادة الغريبة" داخل النجوم النيوترونية؟</li>
+            <li>هل يمكن أن يكون الثقب الأسود مدخلاً لكون آخر (نظرية الارتداد الكبير)؟</li>
+        </ol>
+
+        <div class="category">المستوى الخامس: الأسئلة المستحيلة (خارج حدود العقل)</div>
+        <ol class="q-list" start="81">
+            <li class="impossible">هل يمكن لعقل بشري أن يفهم عقلاً أرقى منه ببعد واحد؟</li>
+            <li class="impossible">ما هو لون "العدم"؟</li>
+            <li class="impossible">إذا اختفى كل شيء في الكون، هل يبقى "المكان" موجوداً؟</li>
+            <li class="impossible">كيف بدأت "أول ذرة" في الوجود دون مسبب سابق؟</li>
+            <li class="impossible">هل يمكن تخيل بُعد رابع مكاني دون استخدام الرياضيات؟</li>
+            <li class="impossible">ما هو الرقم الأخير في π (باي) إذا توقف الكون عن التوسع؟</li>
+            <li class="impossible">هل يمكن خلق قانون فيزيائي جديد يتناقض مع القوانين الحالية؟</li>
+            <li class="impossible">كيف يشعر "الجماد" بالوجود (نظرية الوعي الشامل)؟</li>
+            <li class="impossible">هل يمكن للعدم أن ينفجر لينتج وجوداً؟</li>
+            <li class="impossible">ما هو الشيء الذي هو "موجود" و "غير موجود" في نفس اللحظة بعيداً عن الكم؟</li>
+            <li class="impossible">كيف نعرف أن اللون الأحمر الذي أراه هو نفس اللون الذي تراه أنت؟</li>
+            <li class="impossible">هل هناك نهاية للمعرفة أم أن الأسئلة تتوالد للأبد؟</li>
+            <li class="impossible">ما هي طبيعة "الروح" بعيداً عن الأديان والفلسفات المادية؟</li>
+            <li class="impossible">هل يمكن للماضي أن يتغير إذا تغيرت نظرتنا له في المستقبل؟</li>
+            <li class="impossible">إذا كان الكون لا نهائياً، فهل هناك نسخة منك تسأل نفس السؤال الآن؟</li>
+            <li class="impossible">كيف يمكن للوعي (غير المادي) أن يحرك الجسد (المادي)؟</li>
+            <li class="impossible">ماذا لو كان كل ما نعرفه عن الفيزياء مجرد حالة خاصة في ركن صغير من الكون؟</li>
+            <li class="impossible">هل يمكن للذكاء الاصطناعي أن يشعر بـ "الألم" النفسي؟</li>
+            <li class="impossible">ما هو تعريف "الأنا" إذا تم نسخ دماغك ذرة بذرة؟</li>
+            <li class="impossible">السؤال الأخير: هل هذا السؤال له إجابة أصلاً؟</li>
+        </ol>
+    </div>
+
+</div>
+
+<div class="bottom-nav">
+    <button class="nav-item active" onclick="switchTab('game-tab', this)">
+        <span class="nav-icon">🎮</span>اللعبة
+    </button>
+    <button class="nav-item" onclick="switchTab('chat-tab', this)">
+        <span class="nav-icon">💬</span>الشات
+    </button>
+    <button class="nav-item" onclick="switchTab('leaderboard-tab', this)">
+        <span class="nav-icon">🏆</span>الأبطال
+    </button>
+    <button class="nav-item" onclick="switchTab('syllabus-tab', this)">
+        <span class="nav-icon">📚</span>المنهج
+    </button>
+</div>
+
+<script>
+    function switchTab(tabId, btn) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        btn.classList.add('active');
+    }
+
+    // إضافة الخيارات أ ب ج د لجميع الأسئلة في المنهج تلقائياً دون حذف أي سؤال
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll('ol.q-list li').forEach((li, index) => {
+            const mcqHtml = `
+            <div class="mcq-box">
+                <label><input type="radio" name="q${index}"> أ</label>
+                <label><input type="radio" name="q${index}"> ب</label>
+                <label><input type="radio" name="q${index}"> ج</label>
+                <label><input type="radio" name="q${index}"> د</label>
+            </div>`;
+            li.innerHTML += mcqHtml;
+        });
+    });
+
+    const localQuestions = {
+        "hard": {
+            "h1": { "text": "رياضيات: إذا كانت المصفوفة (أ) على النظم 2×3 والمصفوفة (ب) على النظم 3×2، فإن المصفوفة (أ ب) تكون على النظم...؟", "options": ["3×3", "2×2", "2×3", "لا يمكن ضربهما"], "answer": "2×2" },
+            "h2": { "text": "أحياء: الكربوهيدرات المخزنة في الكبد والعضلات هي عبارة عن...؟", "options": ["نشا", "سليلوز", "جليكوجين", "فركتوز"], "answer": "جليكوجين" },
+            "h14": { "text": "كيمياء: الانبعاث البوزيتروني من النواة يؤدي إلى...؟", "options": ["زيادة العدد الذري بمقدار 1", "نقص العدد الذري بمقدار 1", "نقص العدد الكتلي بمقدار 4", "عدم تغير العدد الذري أو الكتلي"], "answer": "نقص العدد الذري بمقدار 1" },
+            "h15": { "text": "أحياء: الكائنات في مملكة البدائيات (Monera) تتميز بأن نواتها...؟", "options": ["حقيقية", "أولية (غير محاطة بغشاء)", "متعددة", "لا تحتوي على مادة وراثية"], "answer": "أولية (غير محاطة بغشاء)" }
+        },
+        "impossible": {
+            "i1": { "text": "فيزياء: إذا كان الشغل المبذول على جسم يساوي التغير في طاقة حركته، فإن هذا يُعرف بـ...؟", "options": ["قانون حفظ الطاقة الميكانيكية", "مبرهنة الشغل والطاقة", "قانون نيوتن الثالث", "قانون بقاء كمية التحرك"], "answer": "مبرهنة الشغل والطاقة" },
+            "i2": { "text": "رياضيات: الزاوية التي قياسها الدائري (π/3) تكافئ بالدرجات...؟", "options": ["30", "60", "90", "120"], "answer": "60" },
+            "i4": { "text": "أنمي: ما هو اسم القرية التي انتمى إليها غابيمارو الخالي من المشاعر؟", "options": ["كونوها", "إيواغاكوري", "إيواجاكوري (قرية الصخر)", "قرية الحجر (Iwagakure)"], "answer": "قرية الحجر (Iwagakure)" }
+        }
+    };
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDXr5aORgONB7Cvq9qTru3Y_v0-dLzVYNA",
+        authDomain: "tay-game.firebaseapp.com",
+        databaseURL: "https://tay-game-default-rtdb.firebaseio.com",
+        projectId: "tay-game",
+        storageBucket: "tay-game.firebasestorage.app",
+        messagingSenderId: "313499272374",
+        appId: "1:313499272374:web:26b693f457239555365217"
+    };
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.database();
+
+    let myName = prompt("أدخل اسمك يا بطل:") || "طالب مجهول";
+    let score = 0;
+    let currentQuestionIndex = 0; // متغير لضمان الترتيب
+
+    function getRank(s) {
+        if(s >= 200) return "إمبراطور السالموني 👑";
+        if(s >= 150) return "غابيمارو الخالي من المشاعر 🥷";
+        if(s >= 100) return "هيرويك (Heroic) 💎";
+        if(s >= 50) return "دحيح الدفعة 📚";
+        return "مستجد 🔰";
+    }
+
+    const userRef = db.ref('status/' + myName);
+    userRef.set({ name: myName, score: 0, rank: "مستجد 🔰" });
+    userRef.onDisconnect().remove();
+
+    db.ref('status').on('value', snap => {
+        let users = [];
+        snap.forEach(child => { users.push(child.val()); });
+        users.sort((a, b) => b.score - a.score);
+        
+        let html = '';
+        users.forEach(u => {
+            html += `<div class="online-user">
+                        <div><b>${u.name}</b><br><span style="font-size:0.8rem; color:#8b949e;">${u.rank}</span></div>
+                        <div style="font-weight:bold; color:var(--main);">${u.score} 🎯</div>
+                     </div>`;
+        });
+        document.getElementById('online-list').innerHTML = html;
+    });
+
+    function loadQ() {
+        let difficulty = score >= 50 ? "impossible" : "hard";
+        let levelName = difficulty === "hard" ? "صعب 🟠" : "مستحيل 🔴";
+        document.getElementById('lvl-tag').innerText = "المستوى: " + levelName;
+
+        const data = localQuestions[difficulty];
+        const keys = Object.keys(data);
+        
+        // تعديل هنا: الأسئلة تظهر بالترتيب بدلاً من العشوائي
+        const orderedKey = keys[currentQuestionIndex % keys.length];
+        const q = data[orderedKey];
+        currentQuestionIndex++; // الانتقال للسؤال التالي بالترتيب
+
+        document.getElementById('q-text').innerText = q.text;
+        const optDiv = document.getElementById('opts');
+        optDiv.innerHTML = '';
+        
+        let shuffledOptions = q.options.sort(() => Math.random() - 0.5);
+        let answered = false;
+
+        shuffledOptions.forEach(o => {
+            let b = document.createElement('button');
+            b.className = 'btn-opt';
+            b.innerText = o;
+            b.onclick = function() {
+                if(answered) return;
+                answered = true;
+                
+                if(o === q.answer) {
+                    score += 10;
+                    this.classList.add('correct-ans');
+                } else {
+                    score = Math.max(0, score - 5);
+                    this.classList.add('wrong-ans');
+                    Array.from(optDiv.children).forEach(btn => {
+                        if(btn.innerText === q.answer) btn.style.border = "2px solid var(--success)";
+                    });
+                }
+                
+                userRef.update({ score: score, rank: getRank(score) });
+                document.getElementById('score').innerText = score;
+                document.getElementById('rank').innerText = getRank(score);
+                
+                setTimeout(loadQ, 1200);
+            };
+            optDiv.appendChild(b);
+        });
+    }
+
+    function sendMsg() {
+        let m = document.getElementById('chat-msg').value;
+        if(m.trim() !== "") {
+            db.ref('chat').push({ name: myName, text: m });
+            document.getElementById('chat-msg').value = '';
+        }
+    }
+    
+    document.getElementById("chat-msg").addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        sendMsg();
+      }
+    });
+
+    db.ref('chat').limitToLast(30).on('child_added', snap => {
+        const chatBox = document.getElementById('chat-content');
+        chatBox.innerHTML += `<div class="msg-in"><b style="color: var(--main);">${snap.val().name}</b><br>${snap.val().text}</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    function addQuestion() {
+        let q = prompt("اكتب السؤال:");
+        let a = prompt("اكتب الإجابة الصحيحة:");
+        if(q && a) {
+            db.ref('suggestions').push({ q, a, by: myName });
+            alert("تم إرسال اقتراحك للزعيم بنجاح!");
+        }
+    }
+
+    loadQ();
+</script>
+</body>
+</html>
